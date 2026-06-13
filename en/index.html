@@ -60,7 +60,7 @@ const NAME2CODE = {
   'Canada':'can','Bosnia and Herzegovina':'bih','Bosnia & Herzegovina':'bih','Qatar':'qat','Switzerland':'sui',
   'Brazil':'bra','Morocco':'mar','Haiti':'hai','Scotland':'sco',
   'United States':'usa','USA':'usa','Paraguay':'par','Australia':'aus','Türkiye':'tur','Turkey':'tur',
-  'Germany':'ger','Curaçao':'cuw','Curacao':'cuw',"Côte d'Ivoire":'civ','Ivory Coast':'civ',"Cote d'Ivoire":'civ','Ecuador':'ecu',
+  'Germany':'ger','Curaçao':'cuw','Curacao':'cuw',"Côte d'Ivoire":'civ',"Côte d’Ivoire":'civ','Ivory Coast':'civ',"Cote d'Ivoire":'civ','Ecuador':'ecu',
   'Netherlands':'ned','Japan':'jpn','Sweden':'swe','Tunisia':'tun',
   'Belgium':'bel','Egypt':'egy','Iran':'irn','New Zealand':'nzl',
   'Spain':'esp','Cape Verde':'cpv','Cabo Verde':'cpv','Saudi Arabia':'ksa','Uruguay':'uru',
@@ -185,7 +185,11 @@ class App extends Component {
   componentDidMount(){
     try {
       const s = JSON.parse(localStorage.getItem('wc26v2-state'));
-      if (s && (s.rank || s.winners)) this.setState({ rank:s.rank||{}, thirds:s.thirds||{}, winners:s.winners||{} });
+      if (s && (s.rank || s.winners)) {
+        const restored = { rank:s.rank||{}, thirds:s.thirds||{}, winners:s.winners||{} };
+        this.validate(restored);
+        this.setState(restored);
+      }
     } catch(e) {}
     this.fetchOdds();
     this._oddsTimer = setInterval(() => this.fetchOdds(), 5 * 60 * 1000);
@@ -336,7 +340,7 @@ class App extends Component {
     const st = this.state, s = m[sd], key = m.no + sd;
     const resolved = this.resolveSide(st, m, sd);
     const opp = this.resolveSide(st, m, sd === 'a' ? 'b' : 'a');
-    if (resolved) {
+    if (resolved && this.TEAMS[resolved]) {
       const win = st.winners[m.no] === resolved;
       const clickable = !!(resolved && opp);
       let seed;
@@ -424,7 +428,7 @@ class App extends Component {
       ct('MY BRACKET PREDICTION', 195, "600 27px 'Barlow', sans-serif", '#9FB8A8');
       const champ = st.winners[104];
       ct('CHAMPION PICK', 350, "700 30px 'Barlow', sans-serif", '#8B8770');
-      if (champ) {
+      if (champ && this.TEAMS[champ]) {
         ct(this.TEAMS[champ][1], 500, '130px sans-serif', '#191D17');
         ct(this.TEAMS[champ][0], 630, "700 70px 'Barlow Condensed', sans-serif", '#191D17');
       } else {
@@ -524,7 +528,7 @@ class App extends Component {
         const tot = o.p1 + o.pd + o.p2;
         if (tot > 0.5) {
           const q1 = Math.round(o.p1 / tot * 100), qd = Math.round(o.pd / tot * 100);
-          odds = { q1, qd, q2: 100 - q1 - qd,
+          odds = { q1, qd, q2: Math.max(0, 100 - q1 - qd),
             n1: this.TEAMS[t1][0], n2: this.TEAMS[t2][0],
             src: o.closed ? 'Closed' : (o.live ? '🔴 Live · Polymarket' : 'Polymarket live') };
         }
