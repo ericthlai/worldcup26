@@ -2,6 +2,11 @@
 
 A mobile-first prediction playground for the 2026 FIFA World Cup, Bay Area edition.
 
+- 🇨🇳 中文: https://ericthlai.github.io/worldcup26/
+- 🇬🇧 English: https://ericthlai.github.io/worldcup26/en/
+
+Both versions share the same logic and the same browser-saved predictions; footer links switch between them.
+
 - **赛程** — all 52 US group-stage matches with live win/draw/win probability bars from [Polymarket](https://polymarket.com) prediction markets
 - **小组** — tap teams to rank each group (top 2 advance, 3rd goes to best-third pool)
 - **对阵** — interactive knockout bracket with auto-carry of your picks, plus a live champion-odds board
