@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>World Cup 2026 Handbook · Bracket Predictor</title>
 <meta property="og:title" content="World Cup 2026 Handbook">
 <meta property="og:description" content="Rank the groups, project the bracket, watch live Polymarket odds — auto-saved, for fun.">
@@ -14,7 +14,7 @@
   *{box-sizing:border-box;-webkit-tap-highlight-color:rgba(20,32,25,.08)}
   html,body{overflow-x:hidden;max-width:100%}
   body{margin:0;background:#F2EEE2;color:#191D17;font-family:'Barlow',-apple-system,'Helvetica Neue',sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:none}
-  @keyframes fadeup{from{transform:translateY(8px)}to{transform:translateY(0)}}
+  @keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   .pressable:active{transform:scale(.96)}
   .presslight:active{transform:scale(.99)}
   .rowtap:active{background:#EDE8D8 !important}
@@ -99,9 +99,9 @@ class App extends Component {
       J:['arg','alg','aut','jor'], K:['por','cod','uzb','col'], L:['eng','cro','gha','pan']
     };
     this.VEN = {
-      sofi:['SoFi Stadium','Los Angeles · Inglewood','W','US','✈️ ~1h flight / 🚗 5–6h'],
-      levis:["Levi's Stadium",'Santa Clara · Bay Area','W','US','🚗 next door',1],
-      lumen:['Lumen Field','Seattle','W','US','✈️ ~2h flight'],
+      sofi:['SoFi Stadium','Los Angeles · Inglewood','W','US'],
+      levis:["Levi's Stadium",'Santa Clara','W','US'],
+      lumen:['Lumen Field','Seattle','W','US'],
       metlife:['MetLife Stadium','New York / NJ','E','US',''],
       gillette:['Gillette Stadium','Boston · Foxborough','E','US',''],
       linc:['Lincoln Financial Field','Philadelphia','E','US',''],
@@ -199,6 +199,9 @@ class App extends Component {
     return null;
   }
   async fetchOdds(){
+    if (this._fetching) return;
+    this._fetching = true;
+    try {
     const nos = Object.keys(ODDS_SLUGS);
     const batches = [];
     for (let i = 0; i < nos.length; i += 13) batches.push(nos.slice(i, i + 13).map(n => ODDS_SLUGS[n]));
@@ -237,7 +240,8 @@ class App extends Component {
       });
       champ.sort((a, b) => b.p - a.p);
     }
-    this.setState({ odds, champ: champ || this.state.champ, oddsAt: new Date() });
+    this.setState({ odds: Object.keys(odds).length ? { ...this.state.odds, ...odds } : this.state.odds, champ: champ || this.state.champ, oddsAt: new Date() });
+    } finally { this._fetching = false; }
   }
 
   persist(ns){
@@ -345,7 +349,7 @@ class App extends Component {
         seedBg: win ? '#0E8C4F' : '#ECE7D6', seedFg: win ? '#FFFFFF' : '#8B8770',
         bg: win ? '#E6F3E9' : 'transparent',
         cursor: clickable ? 'pointer' : 'default',
-        mark: win ? 'Win ✓' : (clickable ? 'Tap' : ''), markFg: win ? '#0E8C4F' : '#B3AC93',
+        mark: win ? 'Win ✓' : (clickable ? 'Tap' : ''), markFg: win ? '#0E8C4F' : '#857E68',
         onClick: clickable ? (() => this.setWinner(m.no, resolved)) : undefined,
         canClear: s.k === 't',
         onClear: s.k === 't' ? ((e) => { e.stopPropagation(); this.setThird(key, '', m.no); }) : undefined
@@ -370,15 +374,15 @@ class App extends Component {
   }
 
   koCard(m, isLast){
-    const V = this.VEN[m.v], nonUS = V[3] !== 'US', bay = !!V[5];
+    const V = this.VEN[m.v];
     const roundTag = m.no === 104 ? 'Final 🏆' : m.no === 103 ? '3rd place' : '';
     return {
       mno: 'M' + m.no,
       tagline: (roundTag ? roundTag + ' · ' : '') + this.fmtD(m.d) + ' ' + this.fmtW(m.d),
-      venLine: '📍 ' + V[0] + ' · ' + V[1] + (nonUS ? (V[3] === 'MX' ? ' · 🇲🇽 non-US' : ' · 🇨🇦 non-US') : '') + (bay ? ' 🌉' : ''),
-      bg: bay ? '#FCF5DE' : nonUS ? '#EAE7DA' : '#FFFFFF',
-      bd: bay ? '#E0C77F' : '#DCD6C2',
-      op: nonUS ? 0.62 : 1,
+      venLine: '📍 ' + V[0] + ' · ' + V[1],
+      bg: '#FFFFFF',
+      bd: '#DCD6C2',
+      op: 1,
       stub: isLast ? 'transparent' : '#D5CEB8',
       sides: [this.koSide(m, 'a'), this.koSide(m, 'b')]
     };
@@ -417,7 +421,7 @@ class App extends Component {
       band(0);
       ctx.fillStyle = '#142019'; ctx.fillRect(0, 14, W, 250);
       ct('WORLD CUP 2026', 120, "700 78px 'Barlow Condensed', sans-serif", '#F4F0E4');
-      ct('MY BRACKET PREDICTION · BAY AREA', 195, "600 27px 'Barlow', sans-serif", '#9FB8A8');
+      ct('MY BRACKET PREDICTION', 195, "600 27px 'Barlow', sans-serif", '#9FB8A8');
       const champ = st.winners[104];
       ct('CHAMPION PICK', 350, "700 30px 'Barlow', sans-serif", '#8B8770');
       if (champ) {
@@ -440,11 +444,28 @@ class App extends Component {
       const steps = this.usaPath().slice(0, 4);
       steps.forEach((s2, i) => ct(s2, 1110 + i * 44, "500 26px 'Barlow', sans-serif", '#3D443C'));
       band(H - 14);
-      ctx.fillStyle = '#A39C84'; ctx.font = "500 22px 'Barlow', sans-serif"; ctx.textAlign = 'center';
+      ctx.fillStyle = '#6F6856'; ctx.font = "500 22px 'Barlow', sans-serif"; ctx.textAlign = 'center';
       ctx.fillText('World Cup 2026 Handbook · my prediction · for fun', W/2, H - 40);
+      this._shareCanvas = c;
       this.setState({ shareImg: c.toDataURL('image/png') });
     };
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw); else draw();
+  }
+
+  saveShare(){
+    const c = this._shareCanvas; if (!c) return;
+    c.toBlob((blob) => {
+      if (!blob) return;
+      const file = new File([blob], 'worldcup-2026-my-prediction.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: 'World Cup 2026 · my prediction' }).catch(() => {});
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = file.name;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      }
+    }, 'image/png');
   }
 
   /* ---------- renderVals ---------- */
@@ -468,7 +489,7 @@ class App extends Component {
     vals.groupSel = st.groupSel;
     vals.onGroupSel = (e) => this.setState({ groupSel: e.target.value });
     vals.groupOpts = Object.keys(this.GROUPS).map(g => ({ v: g, label: 'Group ' + g }));
-    const chipDefs = [['all','All 52'],['bay','🌉 Bay Area'],['la','Los Angeles'],['sea','Seattle'],['E','East'],['C','Central']];
+    const chipDefs = [['all','All 52'],['W','West'],['C','Central'],['E','East']];
     vals.chips = chipDefs.map(([id, label]) => {
       const on = st.filter === id;
       return { label, bg: on ? '#191D17' : '#FFFFFF', fg: on ? '#F2EEE2' : '#191D17',
@@ -477,17 +498,15 @@ class App extends Component {
     const list = this.GM.filter(m => {
       const v = this.VEN[m[5]];
       if (st.groupSel && m[2] !== st.groupSel) return false;
-      if (st.filter === 'bay') return m[5] === 'levis';
-      if (st.filter === 'la') return m[5] === 'sofi';
-      if (st.filter === 'sea') return m[5] === 'lumen';
-      if (st.filter === 'E') return v[2] === 'E';
+      if (st.filter === 'W') return v[2] === 'W';
       if (st.filter === 'C') return v[2] === 'C';
+      if (st.filter === 'E') return v[2] === 'E';
       return true;
     });
     const days = [];
     list.forEach(mm => {
       const [no, d, g, t1, t2, vk] = mm;
-      const V = this.VEN[vk], bay = !!V[5], ds = this.dayState(d);
+      const V = this.VEN[vk], ds = this.dayState(d);
       let day = days[days.length - 1];
       if (!day || day.d !== d) {
         const x = new Date(d + 'T12:00:00');
@@ -495,9 +514,8 @@ class App extends Component {
         days.push(day);
       }
       const tags = [{ t: 'Grp ' + g, bg: '#E7EEF8', fg: '#2A4E8C' }];
-      if (bay) tags.push({ t: '🌉 Bay Area', bg: '#F4E3AC', fg: '#7A5A00' });
       if (ds === 0) tags.push({ t: 'Today', bg: '#191D17', fg: '#FFFFFF' });
-      if (ds === -1) tags.push({ t: 'Ended', bg: '#E2DECE', fg: '#A39C84' });
+      if (ds === -1) tags.push({ t: 'Ended', bg: '#E2DECE', fg: '#6F6856' });
       tags.push({ t: 'M' + no, bg: '#ECE7D6', fg: '#8B8770' });
       const railC = { W: '#1D5FBF', C: '#0E8C4F', E: '#C8332B' }[V[2]];
       const o = st.odds[no];
@@ -510,12 +528,14 @@ class App extends Component {
             n1: this.TEAMS[t1][0], n2: this.TEAMS[t2][0],
             src: o.closed ? 'Closed' : (o.live ? '🔴 Live · Polymarket' : 'Polymarket live') };
         }
+      } else if (ODDS_SLUGS[no]) {
+        odds = { loading: true };
       }
       day.matches.push({
         t1: this.T(t1), t2: this.T(t2),
-        ven: V[0], city: V[1], trip: V[4] ? ' · ' + V[4] : '',
-        bg: bay ? '#FCF5DE' : '#FFFFFF', bd: bay ? '#E0C77F' : '#DCD6C2',
-        rail: bay ? '#B8860B' : railC, tags, odds
+        ven: V[0], city: V[1],
+        bg: '#FFFFFF', bd: '#DCD6C2',
+        rail: railC, tags, odds
       });
     });
     days.forEach(day => { day.count = day.matches.length; });
@@ -532,11 +552,11 @@ class App extends Component {
       const teams = this.GROUPS[g].map(t => {
         const idx = arr.indexOf(t);
         const implied4 = idx < 0 && arr.length >= 3;
-        let chipBg = 'transparent', chipFg = '#B3AC93', chipBd = '1.5px dashed #C9C2AA', note = '', noteFg = '#A39C84', fg = '#191D17', bg = '#FFFFFF';
+        let chipBg = 'transparent', chipFg = '#857E68', chipBd = '1.5px dashed #C9C2AA', note = '', noteFg = '#6F6856', fg = '#191D17', bg = '#FFFFFF';
         if (idx === 0) { chipBg = '#0E8C4F'; chipFg = '#FFFFFF'; chipBd = '1.5px solid #0E8C4F'; note = 'Advance · top'; noteFg = '#0E8C4F'; }
         else if (idx === 1) { chipBg = '#1D5FBF'; chipFg = '#FFFFFF'; chipBd = '1.5px solid #1D5FBF'; note = 'Advance'; noteFg = '#1D5FBF'; }
         else if (idx === 2) { chipBg = '#B8860B'; chipFg = '#FFFFFF'; chipBd = '1.5px solid #B8860B'; note = '3rd-place pool'; noteFg = '#8A6A0B'; }
-        else if (idx === 3 || implied4) { chipBg = '#E2DECE'; chipFg = '#8B8770'; chipBd = '1.5px solid #E2DECE'; note = 'Out'; fg = '#A39C84'; bg = '#FAF8F0'; }
+        else if (idx === 3 || implied4) { chipBg = '#E2DECE'; chipFg = '#8B8770'; chipBd = '1.5px solid #E2DECE'; note = 'Out'; fg = '#6F6856'; bg = '#FAF8F0'; }
         return {
           flag: this.TEAMS[t][1], name: this.TEAMS[t][0],
           rankNum: idx >= 0 ? String(idx + 1) : (implied4 ? '4' : '–'),
@@ -549,7 +569,7 @@ class App extends Component {
         bd: complete ? '#BFD8C5' : '#DCD6C2',
         headBg: complete ? '#E6F3E9' : '#F7F4E9',
         status: complete ? 'Done ✓' : (arr.length ? arr.length + ' ranked' : 'Tap to rank'),
-        statusFg: complete ? '#0E8C4F' : '#A39C84',
+        statusFg: complete ? '#0E8C4F' : '#6F6856',
         onReset: () => this.resetGroup(g)
       };
     });
@@ -609,6 +629,7 @@ class App extends Component {
     vals.sumSemis = semis.length ? semis.join(' · ') : '—';
     vals.usaSteps = this.usaPath().map(t => ({ t }));
     vals.onShare = () => this.generateShare();
+    vals.onSaveShare = () => this.saveShare();
     vals.shareImg = st.shareImg;
     vals.hasShareImg = !!st.shareImg;
 
@@ -621,7 +642,7 @@ class App extends Component {
 <div style="position:relative;overflow:hidden;background:#142019;color:#F4F0E4;padding:calc(22px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) 18px calc(18px + env(safe-area-inset-left))">
   <span style="position:absolute;right:-12px;top:-40px;font-family:'Anton',sans-serif;font-size:190px;line-height:1;color:rgba(244,240,228,.07);letter-spacing:-6px;pointer-events:none">26</span>
   <div style="display:flex;gap:8px;align-items:center;font-size:11px;letter-spacing:2.5px;color:#9FB8A8;font-weight:600;font-family:'Barlow',sans-serif">
-    <span>JUN 11 — JUL 19</span><span style="width:4px;height:4px;border-radius:50%;background:#C8332B"></span><span>US-hosted matches · Bay Area view</span>
+    <span>JUN 11 — JUL 19</span><span style="width:4px;height:4px;border-radius:50%;background:#C8332B"></span><span>US-hosted matches</span>
   </div>
   <div style="margin-top:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(32px,7vw,46px);line-height:1.05;letter-spacing:.5px">World Cup <span style="font-family:'Anton',sans-serif;color:#E8C25A;letter-spacing:1px">2026</span> Handbook</div>
   <div style="margin-top:8px;font-size:12.5px;color:#B9C4B6">52 US group matches · rank groups, then tap to project the bracket · auto-saved</div>
@@ -637,7 +658,7 @@ class App extends Component {
 
 ${vals.showSched && html`
 <section style="max-width:780px;margin:0 auto;padding:16px 14px 10px;animation:fadeup .25s ease">
-  <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:14px;line-height:1.55">52 group-stage matches are hosted in the US (Canada/Mexico games not listed). <b style="color:#8A6A0B">Levi's Stadium is right next to you — 6 matches</b> (including a Round of 32 on 7/1). The <b style="color:#191D17">win-probability bar</b> under each match comes from the <b style="color:#191D17">Polymarket</b> prediction market and updates live.</div>
+  <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:14px;line-height:1.55">52 group-stage matches are hosted in the US (Canada/Mexico games not listed). The <b style="color:#191D17">win-probability bar</b> under each match comes from the <b style="color:#191D17">Polymarket</b> prediction market and updates live.</div>
   <div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch">
     ${vals.chips.map(c => html`
       <button class="pressable" onClick=${c.onClick} style=${`flex:none;padding:7px 14px;border-radius:999px;border:1px solid ${c.bd};background:${c.bg};color:${c.fg};font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s`}>${c.label}</button>`)}
@@ -650,32 +671,36 @@ ${vals.showSched && html`
     <div style="display:flex;align-items:baseline;gap:9px;margin:20px 2px 9px">
       <span style="font-family:'Anton',sans-serif;font-size:30px;letter-spacing:1px;color:#191D17">${day.dnum}</span>
       <span style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:600;color:#6B7263">${day.wd}</span>
-      <span style="font-size:12px;color:#A39C84">${day.count} ${day.count === 1 ? 'match' : 'matches'}</span>
+      <span style="font-size:12px;color:#6F6856">${day.count} ${day.count === 1 ? 'match' : 'matches'}</span>
       <span style="flex:1;height:1px;background:#DCD6C2"></span>
     </div>
     ${day.matches.map(m => html`
       <div style=${`display:flex;background:${m.bg};border:1px solid ${m.bd};border-radius:11px;margin-bottom:8px;overflow:hidden`}>
         <div style=${`width:5px;flex:none;background:${m.rail}`}></div>
         <div style="flex:1;padding:10px 13px;min-width:0">
-          <div style="font-size:16.5px;font-weight:700;display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span>${m.t1}</span><span style="font-size:10.5px;font-weight:700;color:#B3AC93;letter-spacing:1px">VS</span><span>${m.t2}</span></div>
-          <div style="font-size:12.5px;color:#6B7263;margin-top:4px">📍 <b style="color:#191D17;font-weight:600">${m.ven}</b> · ${m.city}${m.trip}</div>
+          <div style="font-size:16.5px;font-weight:700;display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span>${m.t1}</span><span style="font-size:10.5px;font-weight:700;color:#857E68;letter-spacing:1px">VS</span><span>${m.t2}</span></div>
+          <div style="font-size:12.5px;color:#6B7263;margin-top:4px">📍 <b style="color:#191D17;font-weight:600">${m.ven}</b> · ${m.city}</div>
           <div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">
             ${m.tags.map(tg => html`<span style=${`font-size:10.5px;font-weight:700;letter-spacing:.6px;padding:2.5px 8px;border-radius:5px;background:${tg.bg};color:${tg.fg}`}>${tg.t}</span>`)}
           </div>
-          ${m.odds && html`
+          ${m.odds && (m.odds.loading ? html`
+          <div style="margin-top:9px;padding-top:8px;border-top:1px dashed #E0DAC6">
+            <div style="font-size:10.5px;color:#6F6856;margin-bottom:4px">Loading odds…</div>
+            <div style="height:7px;border-radius:4px;background:#EAE5D5"></div>
+          </div>` : html`
           <div style="margin-top:9px;padding-top:8px;border-top:1px dashed #E0DAC6">
             <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;font-weight:700;margin-bottom:4px;gap:6px;flex-wrap:wrap">
               <span style="color:#1D5FBF">${m.odds.n1} ${m.odds.q1}%</span>
-              <span style="color:#A39C84;font-weight:500;font-size:10.5px">Draw ${m.odds.qd}%</span>
+              <span style="color:#6F6856;font-weight:500;font-size:10.5px">Draw ${m.odds.qd}%</span>
               <span style="color:#C8332B">${m.odds.n2} ${m.odds.q2}%</span>
             </div>
             <div style="display:flex;height:7px;border-radius:4px;overflow:hidden;gap:2px">
               <i style=${`width:${m.odds.q1}%;background:#1D5FBF`}></i>
-              <i style=${`width:${m.odds.qd}%;background:#D5CEB8`}></i>
+              <i style=${`width:${m.odds.qd}%;background:#C2B79A`}></i>
               <i style=${`width:${m.odds.q2}%;background:#C8332B`}></i>
             </div>
-            <div style="font-size:10px;color:#A39C84;text-align:right;margin-top:3px">${m.odds.src}</div>
-          </div>`}
+            <div style="font-size:10px;color:#6F6856;text-align:right;margin-top:3px">${m.odds.src}</div>
+          </div>`)}
         </div>
       </div>`)}
   `)}
@@ -724,11 +749,11 @@ ${vals.showKo && html`
       <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:14px;padding:13px 14px;margin-bottom:12px">
         <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;flex-wrap:wrap">
           <span style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700">📊 Live title odds</span>
-          <span style="font-size:11px;color:#A39C84">Polymarket · updated ${vals.oddsTime}</span>
+          <span style="font-size:11px;color:#6F6856">Polymarket · updated ${vals.oddsTime}</span>
         </div>
         ${vals.champRows.map(r => html`
           <div style=${`display:flex;align-items:center;gap:8px;padding:4.5px 6px;border-radius:8px;${r.hl ? 'background:#FCF5DE;border:1px solid #E0C77F;' : ''}`}>
-            <span style="width:18px;flex:none;font-size:11px;color:#A39C84;text-align:right;font-weight:600">${r.rank}</span>
+            <span style="width:18px;flex:none;font-size:11px;color:#6F6856;text-align:right;font-weight:600">${r.rank}</span>
             <span style="font-size:16px;flex:none">${r.flag}</span>
             <span style="min-width:74px;flex:none;font-size:13px;font-weight:600;white-space:nowrap">${r.name}</span>
             <span style="flex:1;height:8px;border-radius:4px;background:#EFEADB;overflow:hidden"><i style=${`display:block;height:100%;width:${r.barW};background:${r.fill}`}></i></span>
@@ -736,8 +761,8 @@ ${vals.showKo && html`
             ${r.hl && html`<span style="flex:none;font-size:10px;font-weight:700;color:#7A5A00;background:#F4E3AC;padding:1.5px 6px;border-radius:4px">Your pick</span>`}
           </div>`)}
       </div>`}
-    <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:10px;line-height:1.55">The Round of 32 is <b style="color:#191D17">filled automatically</b> from your Group rankings; assign “best third” slots with the dropdowns. <b style="color:#191D17">Tap a team = advance, tap again to undo</b> — results carry to the next round. Canada/Mexico venues are dimmed. Swipe sideways for the full bracket.</div>
-    <div style="font-size:12.5px;color:#1D4E8C;background:#E7EEF8;border:1px solid #C9D9EE;border-radius:10px;padding:10px 13px;margin-bottom:12px;line-height:1.55">🇺🇸 <b>USA route:</b> Group D 1st → Round of 32 <b>7/1 at Levi's (Bay Area)</b> → R16 7/6 Seattle → QF 7/11 Kansas City → SF 7/15 Atlanta → Final 7/19 New York. Group D 2nd → 7/3 Dallas.</div>
+    <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:10px;line-height:1.55">The Round of 32 is <b style="color:#191D17">filled automatically</b> from your Group rankings; assign “best third” slots with the dropdowns. <b style="color:#191D17">Tap a team = advance, tap again to undo</b> — results carry to the next round. Swipe sideways for the full bracket.</div>
+    <div style="font-size:12.5px;color:#1D4E8C;background:#E7EEF8;border:1px solid #C9D9EE;border-radius:10px;padding:10px 13px;margin-bottom:12px;line-height:1.55">🇺🇸 <b>USA route:</b> Group D 1st → Round of 32 <b>7/1 at Levi's</b> → R16 7/6 Seattle → QF 7/11 Kansas City → SF 7/15 Atlanta → Final 7/19 New York. Group D 2nd → 7/3 Dallas.</div>
     <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
       ${vals.koJump.map(j => html`
         <button onClick=${j.onClick} style="padding:6px 12px;border-radius:8px;border:1px solid #D8D2BE;background:#FFFFFF;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">${j.label}</button>`)}
@@ -750,7 +775,7 @@ ${vals.showKo && html`
         <div style="width:250px;display:flex;flex-direction:column">
           <div style="display:flex;align-items:baseline;gap:8px;padding:2px 2px 10px">
             <span style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700">${rd.title}</span>
-            <span style="font-size:11.5px;color:#A39C84">${rd.sub}</span>
+            <span style="font-size:11.5px;color:#6F6856">${rd.sub}</span>
           </div>
           <div style="flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:10px">
             ${rd.matches.map(m => html`
@@ -769,10 +794,10 @@ ${vals.showKo && html`
                         <span style="flex:1;font-size:14px;font-weight:600;color:#191D17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</span>
                         <span style=${`font-size:10px;font-weight:700;letter-spacing:.5px;color:${s.seedFg};background:${s.seedBg};padding:1.5px 6px;border-radius:4px`}>${s.seed}</span>
                         <span style=${`font-size:11px;font-weight:700;color:${s.markFg};flex:none`}>${s.mark}</span>
-                        ${s.canClear && html`<span onClick=${s.onClear} style="font-size:11px;color:#A39C84;border:1px solid #DCD6C2;border-radius:5px;padding:1px 6px;cursor:pointer;flex:none">edit</span>`}
+                        ${s.canClear && html`<span onClick=${s.onClear} style="font-size:11px;color:#6F6856;border:1px solid #DCD6C2;border-radius:5px;padding:1px 6px;cursor:pointer;flex:none">edit</span>`}
                       </div>`}
                     ${s.isEmpty && html`
-                      <div onClick=${s.onClick} style=${`padding:10px;border-top:1px solid #EFEADB;font-size:12px;color:#A39C84;cursor:${s.cursor}`}>${s.label}</div>`}
+                      <div onClick=${s.onClick} style=${`padding:10px;border-top:1px solid #EFEADB;font-size:12px;color:#6F6856;cursor:${s.cursor}`}>${s.label}</div>`}
                     ${s.isSelect && html`
                       <div style="padding:7px 8px;border-top:1px solid #EFEADB">
                         <select onChange=${s.onChange} style="width:100%;padding:7px 8px;border-radius:8px;border:1px solid #D8D2BE;background:#FFFFFF;font-size:13px;font-family:inherit;color:#191D17">
@@ -794,11 +819,11 @@ ${vals.showShare && html`
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
     <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:12px;padding:13px 14px">
       <div style="font-size:11px;letter-spacing:2px;color:#8B8770;font-weight:600">GROUPS RANKED</div>
-      <div style="font-family:'Anton',sans-serif;font-size:30px;margin-top:3px">${vals.grpDoneLabel}<span style="font-size:15px;color:#A39C84"> /12</span></div>
+      <div style="font-family:'Anton',sans-serif;font-size:30px;margin-top:3px">${vals.grpDoneLabel}<span style="font-size:15px;color:#6F6856"> /12</span></div>
     </div>
     <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:12px;padding:13px 14px">
       <div style="font-size:11px;letter-spacing:2px;color:#8B8770;font-weight:600">BRACKET PICKS</div>
-      <div style="font-family:'Anton',sans-serif;font-size:30px;margin-top:3px">${vals.koDone}<span style="font-size:15px;color:#A39C84"> /32</span></div>
+      <div style="font-family:'Anton',sans-serif;font-size:30px;margin-top:3px">${vals.koDone}<span style="font-size:15px;color:#6F6856"> /32</span></div>
     </div>
   </div>
   <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:12px;padding:14px;margin-bottom:10px">
@@ -815,15 +840,15 @@ ${vals.showShare && html`
   ${vals.hasShareImg && html`
     <div>
       <img src=${vals.shareImg} alt="My World Cup prediction" style="width:100%;border-radius:14px;border:1px solid #DCD6C2;margin-top:12px;animation:fadeup .3s ease">
-      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
-        <a href=${vals.shareImg} download="worldcup-2026-my-prediction.png" style="padding:10px 18px;border-radius:10px;background:#FFFFFF;border:1px solid #D8D2BE;color:#191D17;font-size:13.5px;font-weight:600;text-decoration:none">Download image</a>
-        <span style="font-size:12px;color:#8B8770">On mobile, long-press the image to save / share</span>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap">
+        <button class="presslight" onClick=${vals.onSaveShare} style="padding:11px 20px;border-radius:10px;background:#142019;border:none;color:#F4F0E4;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Save / share image</button>
+        <span style="font-size:12px;color:#8B8770">or long-press the image above</span>
       </div>
     </div>`}
 </section>`}
 
 </main>
-<footer style="padding:22px 16px calc(30px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#A39C84">Kickoff times per the official FIFA app · predictions are saved on your device · odds from Polymarket · for entertainment only · <a href="../" style="color:#6B7263;font-weight:600;text-decoration:none">中文</a></footer>`;
+<footer style="padding:22px 16px calc(30px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#6F6856">Kickoff times per the official FIFA app · predictions are saved on your device · odds from Polymarket · for entertainment only · <a href="../" style="color:#6B7263;font-weight:600;text-decoration:none">中文</a></footer>`;
   }
 }
 
