@@ -21,6 +21,7 @@
 </style>
 <script src="./preact.min.umd.js"></script>
 <script src="./htm.umd.js"></script>
+<script src="./data/squads.js"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -75,8 +76,10 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = { tab:'sched', filter:'all', groupSel:'', rank:{}, thirds:{}, winners:{}, shareImg:null,
-      odds:{}, champ:null, oddsAt:null };
+      odds:{}, champ:null, oddsAt:null, detail:null };
     this.bracketRef = createRef();
+    this.SQUADS = window.WC_SQUADS || {};
+    this.LG = 'zh';
 
     this.TEAMS = {
       mex:['墨西哥','🇲🇽'], rsa:['南非','🇿🇦'], kor:['韩国','🇰🇷'], cze:['捷克','🇨🇿'],
@@ -180,6 +183,137 @@ class App extends Component {
     this.KOMAP = {}; this.KO.forEach(m => this.KOMAP[m.no] = m);
     this.TG = {}; Object.keys(this.GROUPS).forEach(g => this.GROUPS[g].forEach(t => this.TG[t] = g));
     this.WD = ['周日','周一','周二','周三','周四','周五','周六'];
+    /* position code → display label (zh) + group for colour coding */
+    this.POSL = { GK:'门将', RB:'右后卫', CB:'中后卫', LB:'左后卫', RWB:'右翼卫', LWB:'左翼卫',
+      DM:'后腰', CM:'中场', AM:'前腰', RM:'右前卫', LM:'左前卫', RW:'右边锋', LW:'左边锋', CF:'前锋', ST:'中锋' };
+  }
+
+  /* ---------- squad / scouting helpers ---------- */
+  SQ(code){ return this.SQUADS[code] || null; }
+  bi(o){ return o ? (o[this.LG] || o.en || '') : ''; }
+  posLabel(p){ return this.POSL[p] || p; }
+  posGroup(p){
+    if (p === 'GK') return 'GK';
+    if (['RB','CB','LB','RWB','LWB'].includes(p)) return 'DEF';
+    if (['DM','CM','AM','RM','LM'].includes(p)) return 'MID';
+    return 'FWD';
+  }
+  posColor(g){ return { GK:'#B8860B', DEF:'#1D5FBF', MID:'#0E8C4F', FWD:'#C8332B' }[g] || '#6F6856'; }
+  fmtVal(v){
+    if (!v || v <= 0) return '—';
+    if (v >= 1000) return '€' + (v / 1000).toFixed(1) + 'B';
+    return '€' + v + 'M';
+  }
+  openMatch(mno){ this.setState({ detail:{ type:'match', mno } }); }
+  openTeam(code){ this.setState({ detail:{ type:'team', code } }); }
+  closeDetail(){ this.setState({ detail:null }); }
+
+  /* one player row inside a scouting card */
+  playerRow(p){
+    const g = this.posGroup(p.pos), c = this.posColor(g);
+    return html`
+    <div style=${`display:flex;align-items:center;gap:9px;padding:7px 4px;border-top:1px solid #EFEADB;${p.star ? 'background:#FCF8EC;' : ''}`}>
+      <span style=${`width:24px;height:24px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:12.5px;background:${c};color:#fff`}>${p.no}</span>
+      <span style=${`width:30px;flex:none;font-size:10px;font-weight:700;letter-spacing:.3px;color:${c};text-align:center`}>${this.posLabel(p.pos)}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:600;color:#191D17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}${p.star ? html`<span style="color:#B8860B;font-size:12px"> ★</span>` : ''}</div>
+        <div style="font-size:11px;color:#6F6856;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.club}${p.cc ? html` · <span style="color:#8B8770">${p.cc}</span>` : ''}</div>
+      </div>
+      <span style="flex:none;font-size:12px;font-weight:700;color:#3D443C;font-family:'Barlow',sans-serif">${this.fmtVal(p.val)}</span>
+    </div>`;
+  }
+
+  /* full scouting card for one team code */
+  teamScoutCard(code){
+    const t = this.SQ(code), T = this.TEAMS[code];
+    const flag = T ? T[1] : '🏳️', zh = T ? T[0] : code;
+    if (!t) {
+      return html`
+      <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:14px;padding:16px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:26px">${flag}</span><span style="font-size:18px;font-weight:700">${zh}</span></div>
+        <div style="margin-top:10px;font-size:13px;color:#6F6856;background:#F4F1E6;border-radius:9px;padding:11px 13px">该队阵容数据整理中,稍后更新。</div>
+      </div>`;
+    }
+    const stars = [].concat(t.xi||[], t.subs||[]).filter(p => p.star);
+    return html`
+    <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:14px;overflow:hidden;margin-bottom:12px">
+      <div style="background:#142019;color:#F4F0E4;padding:13px 15px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:27px">${flag}</span>
+          <span style="font-size:19px;font-weight:700;font-family:'Barlow Condensed','Noto Sans SC',sans-serif">${zh}</span>
+          ${zh !== t.nameEN ? html`<span style="font-size:13px;color:#9FB8A8">${t.nameEN}</span>` : ''}
+          <span style="flex:1"></span>
+          <span style="font-size:12px;font-weight:700;letter-spacing:1px;color:#E8C25A;background:rgba(232,194,90,.14);padding:2.5px 9px;border-radius:6px">${t.formation}</span>
+        </div>
+        <div style="margin-top:7px;font-size:12px;color:#B9C4B6">主帅 ${t.manager}${t.fifaRank ? ` · FIFA 第 ${t.fifaRank} 位` : ''}${t.group ? ` · ${t.group} 组` : ''}</div>
+      </div>
+      <div style="padding:13px 15px">
+        ${this.bi(t.style) && html`<div style="font-size:12.5px;color:#3D443C;line-height:1.6;background:#F4F1E6;border-radius:9px;padding:10px 12px">${this.bi(t.style)}</div>`}
+        ${stars.length > 0 && html`
+          <div style="margin-top:11px">
+            <div style="font-size:11px;letter-spacing:1.5px;color:#8B8770;font-weight:700">重点盯防 · 看谁</div>
+            ${stars.map(p => html`
+              <div style="display:flex;gap:8px;margin-top:6px;align-items:flex-start">
+                <span style="font-size:13px;font-weight:700;color:#191D17;flex:none">${p.name}</span>
+                <span style="font-size:12px;color:#6F6856;line-height:1.45">${this.bi(p.why)}</span>
+              </div>`)}
+          </div>`}
+        ${t.watch && t.watch[this.LG] && t.watch[this.LG].length > 0 && html`
+          <div style="margin-top:11px">
+            <div style="font-size:11px;letter-spacing:1.5px;color:#8B8770;font-weight:700">看点</div>
+            ${t.watch[this.LG].map(w => html`<div style="display:flex;gap:7px;margin-top:5px;font-size:12.5px;color:#3D443C;line-height:1.45"><span style="color:#C8332B;flex:none">▸</span><span>${w}</span></div>`)}
+          </div>`}
+        <div style="margin-top:13px;display:flex;align-items:baseline;gap:8px">
+          <span style="font-family:'Barlow Condensed','Noto Sans SC',sans-serif;font-size:17px;font-weight:700">预计首发</span>
+          <span style="font-size:11px;color:#6F6856">${t.formation} · 共 ${(t.xi||[]).length} 人</span>
+        </div>
+        <div style="margin-top:3px">${(t.xi||[]).map(p => this.playerRow(p))}</div>
+        ${(t.subs||[]).length > 0 && html`
+          <div style="margin-top:13px;display:flex;align-items:baseline;gap:8px">
+            <span style="font-family:'Barlow Condensed','Noto Sans SC',sans-serif;font-size:17px;font-weight:700">关键替补</span>
+            <span style="font-size:11px;color:#6F6856">${t.subs.length} 人</span>
+          </div>
+          <div style="margin-top:3px">${t.subs.map(p => html`
+            ${this.playerRow(p)}
+            ${p.note ? html`<div style="font-size:11px;color:#857E68;padding:0 4px 5px 64px;margin-top:-3px">${this.bi(p.note)}</div>` : ''}`)}</div>`}
+        ${t.updated && html`<div style="margin-top:12px;font-size:10.5px;color:#A9A48C;text-align:right">数据更新 ${t.updated} · 身价来源 Transfermarkt</div>`}
+      </div>
+    </div>`;
+  }
+
+  /* the full-screen detail overlay (match → two teams, or single team) */
+  renderDetail(){
+    const d = this.state.detail;
+    if (!d) return null;
+    let title, sub, bodies;
+    if (d.type === 'match') {
+      const gm = this.GM.find(m => m[0] === d.mno);
+      if (!gm) { this.closeDetail(); return null; }
+      const [no, date, grp, t1, t2, vk] = gm, V = this.VEN[vk];
+      title = this.T(t1) + ' vs ' + this.T(t2);
+      sub = 'M' + no + ' · ' + this.fmtD(date) + ' ' + this.fmtW(date) + ' · ' + V[0] + ' · ' + V[1];
+      bodies = [this.teamScoutCard(t1), this.teamScoutCard(t2)];
+    } else {
+      const T = this.TEAMS[d.code];
+      title = (T ? T[1] + ' ' + T[0] : d.code) + ' 阵容速览';
+      sub = '预计首发 · 关键球员 · 看点';
+      bodies = [this.teamScoutCard(d.code)];
+    }
+    return html`
+    <div onClick=${() => this.closeDetail()} style="position:fixed;inset:0;z-index:200;background:rgba(20,32,25,.55);backdrop-filter:blur(3px);display:flex;flex-direction:column;animation:fadeup .18s ease">
+      <div onClick=${e => e.stopPropagation()} style="margin-top:auto;background:#F2EEE2;border-radius:18px 18px 0 0;max-height:92vh;display:flex;flex-direction:column;max-width:780px;width:100%;align-self:center;box-shadow:0 -8px 40px rgba(0,0,0,.25)">
+        <div style="position:sticky;top:0;background:#142019;color:#F4F0E4;border-radius:18px 18px 0 0;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px)/4) 16px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:17px;font-weight:700;font-family:'Barlow Condensed','Noto Sans SC',sans-serif;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${title}</div>
+            <div style="font-size:11.5px;color:#9FB8A8;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sub}</div>
+          </div>
+          <button class="pressable" onClick=${() => this.closeDetail()} style="flex:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(244,240,228,.14);color:#F4F0E4;font-size:19px;cursor:pointer;line-height:1">✕</button>
+        </div>
+        <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(26px + env(safe-area-inset-bottom))">
+          ${bodies}
+        </div>
+      </div>
+    </div>`;
   }
 
   componentDidMount(){
@@ -479,12 +613,13 @@ class App extends Component {
       goSched: () => this.setState({ tab: 'sched' }),
       goGrp: () => this.setState({ tab: 'grp' }),
       goKo: () => this.setState({ tab: 'ko' }),
+      goTeam: () => this.setState({ tab: 'team' }),
       goShare: () => this.setState({ tab: 'share' }),
       showSched: st.tab === 'sched', showGrp: st.tab === 'grp',
-      showKo: st.tab === 'ko', showShare: st.tab === 'share',
+      showKo: st.tab === 'ko', showTeam: st.tab === 'team', showShare: st.tab === 'share',
       tabFg: {}, tabBg: {}
     };
-    ['sched','grp','ko','share'].forEach(t => {
+    ['sched','grp','ko','team','share'].forEach(t => {
       vals.tabFg[t] = st.tab === t ? '#191D17' : '#8B8770';
       vals.tabBg[t] = st.tab === t ? '#C8332B' : 'transparent';
     });
@@ -535,11 +670,12 @@ class App extends Component {
       } else if (ODDS_SLUGS[no]) {
         odds = { loading: true };
       }
+      const hasSquad = !!(this.SQ(t1) || this.SQ(t2));
       day.matches.push({
-        t1: this.T(t1), t2: this.T(t2),
+        mno: no, t1: this.T(t1), t2: this.T(t2),
         ven: V[0], city: V[1],
         bg: '#FFFFFF', bd: '#DCD6C2',
-        rail: railC, tags, odds
+        rail: railC, tags, odds, hasSquad
       });
     });
     days.forEach(day => { day.count = day.matches.length; });
@@ -637,6 +773,23 @@ class App extends Component {
     vals.shareImg = st.shareImg;
     vals.hasShareImg = !!st.shareImg;
 
+    /* teams browser — all 48, grouped A–L */
+    let withData = 0;
+    vals.teamGroups = Object.keys(this.GROUPS).map(g => ({
+      g,
+      teams: this.GROUPS[g].map(code => {
+        const t = this.SQ(code), T = this.TEAMS[code];
+        if (t) withData++;
+        return {
+          code, flag: T ? T[1] : '🏳️', name: T ? T[0] : code,
+          sub: t ? (t.formation + (t.fifaRank ? ' · FIFA ' + t.fifaRank : '')) : '数据整理中',
+          hasData: !!t,
+          onTap: () => this.openTeam(code)
+        };
+      })
+    }));
+    vals.teamCoverage = withData;
+
     return vals;
   }
 
@@ -654,8 +807,8 @@ class App extends Component {
 <div style="height:5px;display:flex"><i style="flex:1;background:#C8332B"></i><i style="flex:1;background:#0E8C4F"></i><i style="flex:1;background:#1D5FBF"></i></div>
 
 <nav style="position:sticky;top:0;z-index:50;display:flex;background:rgba(242,238,226,.96);backdrop-filter:blur(8px);border-bottom:1px solid #DCD6C2">
-  ${[['sched','赛程',vals.goSched],['grp','小组',vals.goGrp],['ko','对阵',vals.goKo],['share','分享',vals.goShare]].map(([t, lb, go]) => html`
-  <button onClick=${go} style=${`flex:1;padding:13px 4px 8px;background:none;border:none;cursor:pointer;font-family:'Barlow Condensed','Noto Sans SC',sans-serif;font-size:19px;font-weight:600;letter-spacing:2px;color:${vals.tabFg[t]}`}>${lb}<div style=${`height:3px;width:30px;border-radius:2px;margin:6px auto 0;background:${vals.tabBg[t]}`}></div></button>`)}
+  ${[['sched','赛程',vals.goSched],['grp','小组',vals.goGrp],['ko','对阵',vals.goKo],['team','球队',vals.goTeam],['share','分享',vals.goShare]].map(([t, lb, go]) => html`
+  <button onClick=${go} style=${`flex:1;padding:13px 2px 8px;background:none;border:none;cursor:pointer;font-family:'Barlow Condensed','Noto Sans SC',sans-serif;font-size:18px;font-weight:600;letter-spacing:1px;color:${vals.tabFg[t]}`}>${lb}<div style=${`height:3px;width:26px;border-radius:2px;margin:6px auto 0;background:${vals.tabBg[t]}`}></div></button>`)}
 </nav>
 
 <main style="min-height:60vh">
@@ -679,10 +832,10 @@ ${vals.showSched && html`
       <span style="flex:1;height:1px;background:#DCD6C2"></span>
     </div>
     ${day.matches.map(m => html`
-      <div style=${`display:flex;background:${m.bg};border:1px solid ${m.bd};border-radius:11px;margin-bottom:8px;overflow:hidden`}>
+      <div class="rowtap" onClick=${() => this.openMatch(m.mno)} style=${`display:flex;background:${m.bg};border:1px solid ${m.bd};border-radius:11px;margin-bottom:8px;overflow:hidden;cursor:pointer`}>
         <div style=${`width:5px;flex:none;background:${m.rail}`}></div>
-        <div style="flex:1;padding:10px 13px">
-          <div style="font-size:16.5px;font-weight:700;display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span>${m.t1}</span><span style="font-size:10.5px;font-weight:700;color:#857E68;letter-spacing:1px">VS</span><span>${m.t2}</span></div>
+        <div style="flex:1;padding:10px 13px;min-width:0">
+          <div style="font-size:16.5px;font-weight:700;display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span>${m.t1}</span><span style="font-size:10.5px;font-weight:700;color:#857E68;letter-spacing:1px">VS</span><span>${m.t2}</span><span style="flex:1"></span><span style="font-size:11px;font-weight:700;color:#0E8C4F;white-space:nowrap">阵容 ›</span></div>
           <div style="font-size:12.5px;color:#6B7263;margin-top:4px">📍 <b style="color:#191D17;font-weight:600">${m.ven}</b> · ${m.city}</div>
           <div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">
             ${m.tags.map(tg => html`<span style=${`font-size:10.5px;font-weight:700;letter-spacing:.6px;padding:2.5px 8px;border-radius:5px;background:${tg.bg};color:${tg.fg}`}>${tg.t}</span>`)}
@@ -850,7 +1003,31 @@ ${vals.showShare && html`
     </div>`}
 </section>`}
 
+${vals.showTeam && html`
+<section style="max-width:1020px;margin:0 auto;padding:16px 14px 10px;animation:fadeup .25s ease">
+  <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:14px;line-height:1.55">点任意一支球队,看<b style="color:#191D17">预计首发(英文名 + 号码 + 位置 + 效力俱乐部 + 身价)</b>、常见战术、看点和重点球员。赛程页里点某场比赛也能直接看双方阵容。</div>
+  ${vals.teamGroups.map(grp => html`
+    <div style="display:flex;align-items:baseline;gap:9px;margin:18px 2px 9px">
+      <span style="font-family:'Anton',sans-serif;font-size:24px;letter-spacing:1px;color:#191D17">${grp.g}</span>
+      <span style="font-size:13px;font-weight:600;color:#6B7263">组</span>
+      <span style="flex:1;height:1px;background:#DCD6C2"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px">
+      ${grp.teams.map(tm => html`
+        <button class="rowtap" onClick=${tm.onTap} style=${`display:flex;align-items:center;gap:9px;padding:11px 12px;border:1px solid ${tm.hasData ? '#DCD6C2' : '#E6E0CE'};border-radius:11px;background:${tm.hasData ? '#FFFFFF' : '#FAF8F0'};cursor:pointer;text-align:left;font-family:inherit;width:100%;transition:background .15s`}>
+          <span style="font-size:24px;flex:none">${tm.flag}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14.5px;font-weight:700;color:#191D17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tm.name}</div>
+            <div style=${`font-size:10.5px;color:${tm.hasData ? '#6F6856' : '#A9A48C'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis`}>${tm.sub}</div>
+          </div>
+          ${tm.hasData && html`<span style="flex:none;color:#0E8C4F;font-size:14px;font-weight:700">›</span>`}
+        </button>`)}
+    </div>`)}
+  <div style="margin-top:18px;font-size:11px;color:#A9A48C;text-align:center">已收录 ${vals.teamCoverage} / 48 队阵容 · 身价来源 Transfermarkt · 预计首发,实际以开赛公布为准</div>
+</section>`}
+
 </main>
+${this.renderDetail()}
 <footer style="padding:22px 16px calc(30px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#6F6856">开球时间以 FIFA 官网 / 官方 App 为准 · 预测自动保存在本机 · 胜率数据来自 Polymarket · 仅供娱乐 · <a href="en/" style="color:#6B7263;font-weight:600;text-decoration:none">English</a></footer>`;
   }
 }
