@@ -328,20 +328,6 @@ class App extends Component {
     this._oddsTimer = setInterval(() => this.fetchOdds(), 5 * 60 * 1000);
   }
   componentWillUnmount(){ clearInterval(this._oddsTimer); }
-  componentDidUpdate(prevProps, prevState){
-    /* lock background scroll while the detail overlay is open so the wheel /
-       touch scrolls the overlay, not the page behind it */
-    if (!!this.state.detail === !!prevState.detail) return;
-    const b = document.body;
-    if (this.state.detail) {
-      const sw = window.innerWidth - document.documentElement.clientWidth;
-      b.style.overflow = 'hidden';
-      if (sw > 0) b.style.paddingRight = sw + 'px';
-    } else {
-      b.style.overflow = '';
-      b.style.paddingRight = '';
-    }
-  }
 
   /* ---------- Polymarket odds ---------- */
   marketProb(mk){
