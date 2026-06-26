@@ -11,7 +11,7 @@ window.WC_SQUADS = {
     "nameEN": "Mexico",
     "fifaRank": 17,
     "group": "A",
-    "formation": "4-3-3",
+    "formation": "4-1-4-1",
     "manager": "Javier Aguirre",
     "style": {
       "en": "Co-hosts who press in midfield bursts and build through possession with Liga MX-based technicians, leaning on home crowds and a deep, experienced spine. Strength is midfield control and squad depth; the main weakness is a chronic lack of a clinical, in-form center-forward and shaky concentration in defensive transitions.",
@@ -32,168 +32,252 @@ window.WC_SQUADS = {
     "xi": [
       {
         "no": 1,
-        "name": "Rangel",
+        "name": "Raul Rangel",
         "pos": "GK",
         "club": "Guadalajara",
         "cc": "MEX",
-        "val": 5.6
+        "val": 6.5
       },
       {
         "no": 15,
-        "name": "Reyes",
+        "name": "Israel Reyes",
         "pos": "RB",
-        "club": "Club America",
+        "club": "America",
         "cc": "MEX",
-        "val": 4.8
+        "val": 6.5
       },
-      {
-        "no": 3,
-        "name": "Montes",
-        "pos": "CB",
-        "club": "Lokomotiv Moscow",
-        "cc": "RUS",
-        "val": 7.0
-      },
-      {
-        "no": 5,
-        "name": "Vasquez",
-        "pos": "CB",
-        "club": "Genoa",
-        "cc": "ITA",
-        "val": 13.0
-      },
-      {
-        "no": 23,
-        "name": "Gallardo",
-        "pos": "LB",
-        "club": "Toluca",
-        "cc": "MEX",
-        "val": 3.0
-      },
-      {
-        "no": 6,
-        "name": "Lira",
-        "pos": "DM",
-        "club": "Cruz Azul",
-        "cc": "MEX",
-        "val": 10.6
-      },
-      {
-        "no": 8,
-        "name": "Fidalgo",
-        "pos": "CM",
-        "club": "Real Betis",
-        "cc": "ESP",
-        "val": 8.0
-      },
-      {
-        "no": 26,
-        "name": "B. Gutierrez",
-        "pos": "CM",
-        "club": "Guadalajara",
-        "cc": "MEX",
-        "val": 4.9
-      },
-      {
-        "no": 25,
-        "name": "Alvarado",
-        "pos": "RW",
-        "club": "Guadalajara",
-        "cc": "MEX",
-        "val": 6.0
-      },
-      {
-        "no": 9,
-        "name": "Jimenez",
-        "pos": "ST",
-        "club": "Fulham",
-        "cc": "ENG",
-        "val": 3.0,
-        "star": true,
-        "why": {
-          "en": "Veteran No.9 and talisman who led the line in the opener; Mexico's chance-conversion hinges on him.",
-          "zh": "老将9号兼精神领袖，揭幕战担任箭头；墨西哥的把握机会能力系于其一身。"
-        }
-      },
-      {
-        "no": 16,
-        "name": "Quinones",
-        "pos": "LW",
-        "club": "Al-Qadsiah",
-        "cc": "KSA",
-        "val": 14.0
-      }
-    ],
-    "subs": [
       {
         "no": 4,
-        "name": "E. Alvarez",
-        "pos": "DM",
+        "name": "Edson Alvarez",
+        "pos": "CB",
         "club": "Fenerbahce",
         "cc": "TUR",
         "val": 15.0,
         "star": true,
         "why": {
-          "en": "The captain and defensive-midfield anchor was rested at kickoff but is the squad's quality benchmark in the engine room.",
-          "zh": "队长兼后腰核心，揭幕战被轮休，却是全队中场质量的标杆。"
+          "en": "Captain and midfield-or-defense Swiss army knife who anchors the whole structure.",
+          "zh": "队长，能踢后腰也能踢中卫的体系核心。"
         },
         "note": {
-          "en": "captain, impact sub",
-          "zh": "队长，奇兵替补"
+          "en": "Captain; shifted to center back to cover the suspended Cesar Montes vs South Korea.",
+          "zh": "队长；对阵韩国时因蒙特斯停赛改踢中卫。"
         }
       },
       {
+        "no": 5,
+        "name": "Johan Vasquez",
+        "pos": "CB",
+        "club": "Genoa",
+        "cc": "ITA",
+        "val": 12.0
+      },
+      {
+        "no": 23,
+        "name": "Jesus Gallardo",
+        "pos": "LB",
+        "club": "Toluca",
+        "cc": "MEX",
+        "val": 2.8
+      },
+      {
+        "no": 6,
+        "name": "Erik Lira",
+        "pos": "DM",
+        "club": "Cruz Azul",
+        "cc": "MEX",
+        "val": 12.0
+      },
+      {
+        "no": 25,
+        "name": "Roberto Alvarado",
+        "pos": "RM",
+        "club": "Guadalajara",
+        "cc": "MEX",
+        "val": 7.5
+      },
+      {
         "no": 19,
-        "name": "Mora",
+        "name": "Gilberto Mora",
         "pos": "AM",
         "club": "Tijuana",
         "cc": "MEX",
         "val": 10.0,
         "star": true,
         "why": {
-          "en": "At 17 he is Liga MX's highest-valued player and Mexico's x-factor off the bench, chased by Europe's giants.",
-          "zh": "年仅17岁便是墨超身价最高的球员，替补登场的胜负手，受欧洲豪门追逐。"
-        },
-        "note": {
-          "en": "teen wonderkid",
-          "zh": "天才新星"
+          "en": "At 17 the youngest player at the World Cup, a Gold Cup winner already drawing Real Madrid interest.",
+          "zh": "17岁，本届世界杯最年轻球员，已夺金杯赛冠军并受皇马关注。"
         }
       },
       {
-        "no": 11,
-        "name": "S. Gimenez",
-        "pos": "ST",
-        "club": "AC Milan",
-        "cc": "ITA",
-        "val": 22.0,
+        "no": 8,
+        "name": "Alvaro Fidalgo",
+        "pos": "CM",
+        "club": "Real Betis",
+        "cc": "ESP",
+        "val": 6.0
+      },
+      {
+        "no": 16,
+        "name": "Julian Quinones",
+        "pos": "LW",
+        "club": "Al-Qadsiah",
+        "cc": "KSA",
+        "val": 14.0
+      },
+      {
+        "no": 9,
+        "name": "Raul Jimenez",
+        "pos": "CF",
+        "club": "Fulham",
+        "cc": "ENG",
+        "val": 3.0,
         "note": {
-          "en": "impact sub",
-          "zh": "奇兵替补"
+          "en": "35-year-old talisman with 124 caps and 45 goals; veteran focal point up top.",
+          "zh": "35岁老将，124场45球，锋线支点。"
         }
+      }
+    ],
+    "subs": [
+      {
+        "no": 12,
+        "name": "Carlos Acevedo",
+        "pos": "GK",
+        "club": "Santos Laguna",
+        "cc": "MEX",
+        "val": 2.8
+      },
+      {
+        "no": 13,
+        "name": "Guillermo Ochoa",
+        "pos": "GK",
+        "club": "AEL Limassol",
+        "cc": "CYP",
+        "val": 0.25,
+        "note": {
+          "en": "Record-chasing veteran appearing at a sixth World Cup at age 40; backup but iconic.",
+          "zh": "40岁第六次参加世界杯（追平纪录），替补但是标志性人物。"
+        }
+      },
+      {
+        "no": 3,
+        "name": "Cesar Montes",
+        "pos": "CB",
+        "club": "Lokomotiv Moscow",
+        "cc": "RUS",
+        "val": 7.5,
+        "note": {
+          "en": "First-choice center back; missed the South Korea game through suspension.",
+          "zh": "主力中卫，对阵韩国因停赛缺阵。"
+        }
+      },
+      {
+        "no": 2,
+        "name": "Jorge Sanchez",
+        "pos": "RB",
+        "club": "PAOK",
+        "cc": "GRE",
+        "val": 2.0
+      },
+      {
+        "no": 20,
+        "name": "Mateo Chavez",
+        "pos": "LB",
+        "club": "AZ",
+        "cc": "NED",
+        "val": 4.0
+      },
+      {
+        "no": 7,
+        "name": "Luis Romo",
+        "pos": "CM",
+        "club": "Guadalajara",
+        "cc": "MEX",
+        "val": 3.0
       },
       {
         "no": 17,
-        "name": "Pineda",
+        "name": "Orbelin Pineda",
         "pos": "AM",
         "club": "AEK Athens",
         "cc": "GRE",
-        "val": 4.0,
-        "note": {
-          "en": "creative sub",
-          "zh": "创造力替补"
-        }
+        "val": 7.0
       },
       {
         "no": 18,
-        "name": "Vargas",
-        "pos": "CM",
+        "name": "Obed Vargas",
+        "pos": "DM",
         "club": "Atletico Madrid",
         "cc": "ESP",
-        "val": 8.0,
+        "val": 10.0,
         "note": {
-          "en": "midfield depth",
-          "zh": "中场轮换"
+          "en": "20-year-old holding midfielder who earned a move to Atletico Madrid.",
+          "zh": "20岁后腰，已加盟马德里竞技。"
         }
+      },
+      {
+        "no": 24,
+        "name": "Luis Chavez",
+        "pos": "CM",
+        "club": "Dynamo Moscow",
+        "cc": "RUS",
+        "val": 6.0
+      },
+      {
+        "no": 26,
+        "name": "Brian Gutierrez",
+        "pos": "AM",
+        "club": "Guadalajara",
+        "cc": "MEX",
+        "val": 8.0
+      },
+      {
+        "no": 21,
+        "name": "Cesar Huerta",
+        "pos": "LW",
+        "club": "Anderlecht",
+        "cc": "BEL",
+        "val": 3.5
+      },
+      {
+        "no": 11,
+        "name": "Santiago Gimenez",
+        "pos": "ST",
+        "club": "Milan",
+        "cc": "ITA",
+        "val": 18.0,
+        "star": true,
+        "why": {
+          "en": "Milan's Mexican striker and the squad's most valuable player; the long-term goal threat ahead of veteran Jimenez.",
+          "zh": "AC米兰墨西哥前锋，队内身价最高，未来锋线第一选择。"
+        }
+      },
+      {
+        "no": 10,
+        "name": "Alexis Vega",
+        "pos": "LW",
+        "club": "Toluca",
+        "cc": "MEX",
+        "val": 8.0
+      },
+      {
+        "no": 14,
+        "name": "Armando Gonzalez",
+        "pos": "ST",
+        "club": "Guadalajara",
+        "cc": "MEX",
+        "val": 15.0,
+        "note": {
+          "en": "Young Liga MX striker valued at €15m, a rising attacking option.",
+          "zh": "墨超新星前锋，身价1500万欧。"
+        }
+      },
+      {
+        "no": 22,
+        "name": "Guillermo Martinez",
+        "pos": "ST",
+        "club": "Pumas UNAM",
+        "cc": "MEX",
+        "val": 1.5
       }
     ],
     "updated": "2026-06-14"
@@ -203,7 +287,7 @@ window.WC_SQUADS = {
     "nameEN": "South Africa",
     "fifaRank": 60,
     "group": "A",
-    "formation": "5-3-2",
+    "formation": "4-3-3",
     "manager": "Hugo Broos",
     "style": {
       "en": "Hugo Broos drills a disciplined, compact 5-3-2 built on a five-man defence and a hard-working midfield, springing forward through quick transitions and the dribbling of their young wide creators. Their strength is organisation, energy and a settled domestic core; the main weakness is a lack of top-level firepower and experience, with most of the squad based in the South African league.",
@@ -231,17 +315,17 @@ window.WC_SQUADS = {
         "val": 0.8,
         "star": true,
         "why": {
-          "en": "Captain, talisman and a renowned shot-stopper and penalty specialist — kept South Africa competitive throughout qualifying.",
-          "zh": "队长兼精神领袖,著名的扑救高手和点球专家,整个预选赛都是南非保持竞争力的关键。"
+          "en": "Captain and talisman with the most caps in the group; a penalty-shootout hero whose shot-stopping keeps Bafana in tight games.",
+          "zh": "队长兼精神领袖，全组出场次数最多；点球大战英雄，扑救能力让南非在硬仗中站稳脚跟。"
         }
       },
       {
         "no": 20,
         "name": "Khuliso Mudau",
-        "pos": "RWB",
+        "pos": "RB",
         "club": "Mamelodi Sundowns",
         "cc": "RSA",
-        "val": 0.5
+        "val": 1.2
       },
       {
         "no": 21,
@@ -252,32 +336,24 @@ window.WC_SQUADS = {
         "val": 2.0
       },
       {
-        "no": 19,
-        "name": "Nkosinathi Sibisi",
-        "pos": "CB",
-        "club": "Orlando Pirates",
-        "cc": "RSA",
-        "val": 1.5
-      },
-      {
         "no": 14,
         "name": "Mbekezeli Mbokazi",
         "pos": "CB",
-        "club": "Chicago Fire",
+        "club": "Chicago Fire FC",
         "cc": "USA",
         "val": 2.5,
         "note": {
-          "en": "young CB",
-          "zh": "年轻中卫"
+          "en": "20-year-old centre-back whose value exploded after a December 2025 move to MLS; a breakout star of the qualifying run.",
+          "zh": "20岁中卫，2025年12月转会MLS后身价暴涨；预选赛阶段的新星。"
         }
       },
       {
         "no": 6,
         "name": "Aubrey Modiba",
-        "pos": "LWB",
+        "pos": "LB",
         "club": "Mamelodi Sundowns",
         "cc": "RSA",
-        "val": 0.8
+        "val": 1.8
       },
       {
         "no": 4,
@@ -285,20 +361,19 @@ window.WC_SQUADS = {
         "pos": "DM",
         "club": "Mamelodi Sundowns",
         "cc": "RSA",
-        "val": 2.8,
-        "star": true,
-        "why": {
-          "en": "Midfield engine and dead-ball threat; his passing range and goals from distance are central to how Bafana build and score.",
-          "zh": "中场发动机和定位球威胁,他的传球视野与远射进球是南非组织和得分的核心。"
+        "val": 1.4,
+        "note": {
+          "en": "Midfield metronome and set-piece weapon — but suspended for the next group game vs Korea after a booking accumulation.",
+          "zh": "中场节拍器兼定位球武器，但因累计黄牌将停赛缺席下一场对阵韩国的比赛。"
         }
       },
       {
-        "no": 13,
-        "name": "Sphephelo Sithole",
+        "no": 5,
+        "name": "Thalente Mbatha",
         "pos": "CM",
-        "club": "Tondela",
-        "cc": "POR",
-        "val": 0.6
+        "club": "Orlando Pirates",
+        "cc": "RSA",
+        "val": 2.0
       },
       {
         "no": 23,
@@ -309,67 +384,110 @@ window.WC_SQUADS = {
         "val": 1.8
       },
       {
-        "no": 9,
-        "name": "Lyle Foster",
-        "pos": "ST",
-        "club": "Burnley",
-        "cc": "ENG",
-        "val": 8.0,
-        "star": true,
-        "why": {
-          "en": "The squad's only Premier League forward and most valuable player; South Africa's main and often lone goal outlet up top.",
-          "zh": "全队唯一的英超前锋,也是身价最高的球员,是南非锋线主要且常常唯一的进球出口。"
-        }
+        "no": 12,
+        "name": "Thapelo Maseko",
+        "pos": "RW",
+        "club": "AEL Limassol",
+        "cc": "CYP",
+        "val": 0.75
       },
       {
         "no": 15,
         "name": "Iqraam Rayners",
-        "pos": "ST",
+        "pos": "CF",
         "club": "Mamelodi Sundowns",
         "cc": "RSA",
         "val": 2.8
-      }
-    ],
-    "subs": [
-      {
-        "no": 10,
-        "name": "Relebohile Mofokeng",
-        "pos": "LW",
-        "club": "Orlando Pirates",
-        "cc": "RSA",
-        "val": 3.0,
-        "star": true,
-        "why": {
-          "en": "21-year-old PSL Player of the Season and the team's most exciting dribbler — the likeliest player to win a game off the bench.",
-          "zh": "21 岁的南非联赛赛季最佳球员,球队最具观赏性的盘带手——最可能替补登场后赢下比赛的人。"
-        },
-        "note": {
-          "en": "impact sub / X-factor",
-          "zh": "奇兵/X 因素"
-        }
       },
       {
         "no": 7,
         "name": "Oswin Appollis",
-        "pos": "RW",
+        "pos": "LW",
         "club": "Orlando Pirates",
         "cc": "RSA",
-        "val": 2.5,
-        "note": {
-          "en": "creative winger",
-          "zh": "创造型边锋"
+        "val": 0.48,
+        "star": true,
+        "why": {
+          "en": "Bafana's qualifying creator-in-chief — involved in twice as many goals as any teammate; starred against Czechia.",
+          "zh": "南非预选赛头号创造者，参与进球数是队友的两倍；对阵捷克表现抢眼。"
         }
+      }
+    ],
+    "subs": [
+      {
+        "no": 16,
+        "name": "Sipho Chaine",
+        "pos": "GK",
+        "club": "Orlando Pirates",
+        "cc": "RSA",
+        "val": 0.7
       },
       {
-        "no": 17,
-        "name": "Evidence Makgopa",
-        "pos": "CF",
+        "no": 22,
+        "name": "Ricardo Goss",
+        "pos": "GK",
+        "club": "Siwelele",
+        "cc": "RSA",
+        "val": 0.3
+      },
+      {
+        "no": 2,
+        "name": "Thabang Matuludi",
+        "pos": "CB",
+        "club": "Polokwane City",
+        "cc": "RSA",
+        "val": 0.4
+      },
+      {
+        "no": 3,
+        "name": "Khulumani Ndamane",
+        "pos": "CB",
+        "club": "Mamelodi Sundowns",
+        "cc": "RSA",
+        "val": 0.8
+      },
+      {
+        "no": 19,
+        "name": "Nkosinathi Sibisi",
+        "pos": "CB",
         "club": "Orlando Pirates",
         "cc": "RSA",
-        "val": 1.4,
+        "val": 1.6
+      },
+      {
+        "no": 18,
+        "name": "Samukele Kabini",
+        "pos": "CB",
+        "club": "Molde",
+        "cc": "NOR",
+        "val": 0.6
+      },
+      {
+        "no": 24,
+        "name": "Olwethu Makhanya",
+        "pos": "CB",
+        "club": "Philadelphia Union",
+        "cc": "USA",
+        "val": 0.9
+      },
+      {
+        "no": 26,
+        "name": "Bradley Cross",
+        "pos": "LB",
+        "club": "Kaizer Chiefs",
+        "cc": "RSA",
+        "val": 0.5
+      },
+      {
+        "no": 13,
+        "name": "Sphephelo Sithole",
+        "pos": "DM",
+        "club": "Tondela",
+        "cc": "POR",
+        "val": 1.5,
         "note": {
-          "en": "backup striker",
-          "zh": "替补前锋"
+          "en": "Started vs Mexico but sent off; serves suspension before returning to bolster the midfield.",
+          "zh": "对阵墨西哥首发却被罚下；停赛后将回归加固中场。"
         }
       },
       {
@@ -378,11 +496,15 @@ window.WC_SQUADS = {
         "pos": "AM",
         "club": "Mamelodi Sundowns",
         "cc": "RSA",
-        "val": 0.25,
-        "note": {
-          "en": "veteran creator",
-          "zh": "老将创造者"
-        }
+        "val": 0.5
+      },
+      {
+        "no": 8,
+        "name": "Tshepang Moremi",
+        "pos": "RW",
+        "club": "Orlando Pirates",
+        "cc": "RSA",
+        "val": 1.0
       },
       {
         "no": 25,
@@ -390,11 +512,40 @@ window.WC_SQUADS = {
         "pos": "RW",
         "club": "Orlando Pirates",
         "cc": "RSA",
-        "val": 1.0,
-        "note": {
-          "en": "young attacker",
-          "zh": "年轻攻击手"
+        "val": 1.0
+      },
+      {
+        "no": 10,
+        "name": "Relebohile Mofokeng",
+        "pos": "LW",
+        "club": "Orlando Pirates",
+        "cc": "RSA",
+        "val": 1.2,
+        "star": true,
+        "why": {
+          "en": "21-year-old Orlando Pirates wonderkid and the squad's brightest long-term prospect; an impact option off the bench.",
+          "zh": "21岁的海盗天才小将，全队最被看好的未来之星；替补登场的奇兵。"
         }
+      },
+      {
+        "no": 9,
+        "name": "Lyle Foster",
+        "pos": "ST",
+        "club": "Burnley",
+        "cc": "ENG",
+        "val": 11.3,
+        "note": {
+          "en": "Premier League striker and by far the squad's most valuable player; started vs Mexico, dropped to bench vs Czechia.",
+          "zh": "英超前锋，全队身价最高者；对阵墨西哥首发，对阵捷克退居替补。"
+        }
+      },
+      {
+        "no": 17,
+        "name": "Evidence Makgopa",
+        "pos": "ST",
+        "club": "Orlando Pirates",
+        "cc": "RSA",
+        "val": 1.0
       }
     ],
     "updated": "2026-06-14"
@@ -404,7 +555,7 @@ window.WC_SQUADS = {
     "nameEN": "South Korea",
     "fifaRank": 25,
     "group": "A",
-    "formation": "3-5-2",
+    "formation": "3-4-2-1",
     "manager": "Hong Myung-bo",
     "style": {
       "en": "A disciplined, low-possession transition team that sits in a compact mid-block and springs fast counters through its wing-backs and technical front line; Kim Min-jae's recovery pace lets them defend high when needed. Main weakness is thin, lower-quality full-back/wing-back depth and an over-reliance on aging stars Son and Lee Jae-sung for creation.",
@@ -429,7 +580,7 @@ window.WC_SQUADS = {
         "pos": "GK",
         "club": "FC Tokyo",
         "cc": "JPN",
-        "val": 0.8
+        "val": 0.5
       },
       {
         "no": 4,
@@ -440,8 +591,8 @@ window.WC_SQUADS = {
         "val": 20.0,
         "star": true,
         "why": {
-          "en": "Korea's defensive backbone — a top-club center-back whose pace and aerial duels keep the back three viable against elite attackers.",
-          "zh": "韩国防线的脊梁——顶级俱乐部中卫，速度与制空让这条三后卫面对强敌仍能立足。"
+          "en": "Bayern's elite ball-winning centre-back and the spine of Korea's back three.",
+          "zh": "拜仁主力中卫，韩国三中卫体系的轴心，对抗和出球俱佳。"
         }
       },
       {
@@ -450,35 +601,35 @@ window.WC_SQUADS = {
         "pos": "CB",
         "club": "Midtjylland",
         "cc": "DEN",
-        "val": 1.9
-      },
-      {
-        "no": 23,
-        "name": "Jens Castrop",
-        "pos": "CB",
-        "club": "Borussia Monchengladbach",
-        "cc": "GER",
-        "val": 8.0,
+        "val": 3.0,
         "note": {
-          "en": "German-born convert, can also play DM",
-          "zh": "德国出生的归化新援，亦可踢后腰"
+          "en": "Breakout opening-week form has triggered transfer interest from bigger clubs.",
+          "zh": "开赛首周表现亮眼，已引来更大俱乐部的转会兴趣。"
         }
       },
       {
-        "no": 15,
-        "name": "Kim Moon-hwan",
-        "pos": "RWB",
-        "club": "Daejeon Hana Citizen",
+        "no": 3,
+        "name": "Lee Gi-hyuk",
+        "pos": "CB",
+        "club": "Gangwon FC",
         "cc": "KOR",
-        "val": 0.75
+        "val": 0.8
       },
       {
         "no": 22,
         "name": "Seol Young-woo",
-        "pos": "LWB",
+        "pos": "RWB",
         "club": "Red Star Belgrade",
         "cc": "SRB",
-        "val": 5.0
+        "val": 6.5
+      },
+      {
+        "no": 13,
+        "name": "Lee Tae-seok",
+        "pos": "LWB",
+        "club": "Austria Wien",
+        "cc": "AUT",
+        "val": 2.0
       },
       {
         "no": 6,
@@ -486,14 +637,18 @@ window.WC_SQUADS = {
         "pos": "DM",
         "club": "Feyenoord",
         "cc": "NED",
-        "val": 7.0
+        "val": 7.0,
+        "note": {
+          "en": "Scored the 67' equaliser in the 2-1 comeback win over Czechia.",
+          "zh": "对捷克2-1逆转中第67分钟攻入扳平球。"
+        }
       },
       {
-        "no": 10,
-        "name": "Lee Jae-sung",
-        "pos": "CM",
-        "club": "Mainz 05",
-        "cc": "GER",
+        "no": 8,
+        "name": "Paik Seung-ho",
+        "pos": "DM",
+        "club": "Birmingham City",
+        "cc": "ENG",
         "val": 2.0
       },
       {
@@ -505,9 +660,17 @@ window.WC_SQUADS = {
         "val": 28.0,
         "star": true,
         "why": {
-          "en": "Korea's creative engine — elite vision and a left foot that unlocks low-blocks; the player most likely to manufacture a goal from nothing.",
-          "zh": "韩国的创造引擎——顶级视野加左脚，能撬开摆大巴的对手；最可能无中生有创造进球的人。"
+          "en": "PSG playmaker and Korea's most valuable player; the creative engine behind Son.",
+          "zh": "巴黎组织核心，韩国身价最高的球员，孙兴慜身后的创造力发动机。"
         }
+      },
+      {
+        "no": 10,
+        "name": "Lee Jae-sung",
+        "pos": "AM",
+        "club": "Mainz 05",
+        "cc": "GER",
+        "val": 2.0
       },
       {
         "no": 7,
@@ -515,46 +678,83 @@ window.WC_SQUADS = {
         "pos": "CF",
         "club": "Los Angeles FC",
         "cc": "USA",
-        "val": 11.0,
+        "val": 15.0,
         "star": true,
         "why": {
-          "en": "Captain and talisman at his fourth World Cup — world-class finishing and set-piece threat make him the team's decisive match-winner.",
-          "zh": "队长兼旗帜，第四次出战世界杯——世界级终结能力和定位球威胁，是球队的决定性胜负手。"
+          "en": "Captain, talisman and all-time top scorer (56 goals) leading the line at his last World Cup.",
+          "zh": "队长兼旗帜、队史第一射手（56球），最后一届世界杯领衔锋线。"
         }
-      },
-      {
-        "no": 9,
-        "name": "Cho Gue-sung",
-        "pos": "ST",
-        "club": "Midtjylland",
-        "cc": "DEN",
-        "val": 2.9
       }
     ],
     "subs": [
       {
-        "no": 11,
-        "name": "Hwang Hee-chan",
-        "pos": "LW",
-        "club": "Wolverhampton Wanderers",
-        "cc": "ENG",
-        "val": 9.7,
-        "note": {
-          "en": "pace off the bench / rotation forward",
-          "zh": "替补登场的速度点 / 轮换前锋"
+        "no": 21,
+        "name": "Jo Hyeon-woo",
+        "pos": "GK",
+        "club": "Ulsan HD",
+        "cc": "KOR",
+        "val": 0.65
+      },
+      {
+        "no": 12,
+        "name": "Song Bum-keun",
+        "pos": "GK",
+        "club": "Jeonbuk Hyundai Motors",
+        "cc": "KOR",
+        "val": 1.0
+      },
+      {
+        "no": 5,
+        "name": "Kim Tae-hyeon",
+        "pos": "CB",
+        "club": "Kashima Antlers",
+        "cc": "JPN",
+        "val": 1.2
+      },
+      {
+        "no": 14,
+        "name": "Cho Wi-je",
+        "pos": "CB",
+        "club": "Jeonbuk Hyundai Motors",
+        "cc": "KOR",
+        "val": 0.55
+      },
+      {
+        "no": 15,
+        "name": "Kim Moon-hwan",
+        "pos": "RB",
+        "club": "Daejeon Hana Citizen",
+        "cc": "KOR",
+        "val": 0.75
+      },
+      {
+        "no": 16,
+        "name": "Park Jin-seob",
+        "pos": "DM",
+        "club": "Zhejiang Professional",
+        "cc": "CHN",
+        "val": 1.0
+      },
+      {
+        "no": 23,
+        "name": "Jens Castrop",
+        "pos": "CM",
+        "club": "Borussia Mönchengladbach",
+        "cc": "GER",
+        "val": 10.0,
+        "star": true,
+        "why": {
+          "en": "German-born Bundesliga midfielder who chose Korea; the squad's rising box-to-box talent.",
+          "zh": "德国出生、选择代表韩国的德甲中场，全队最具上升空间的B2B新星。"
         }
       },
       {
-        "no": 18,
-        "name": "Oh Hyeon-gyu",
-        "pos": "ST",
-        "club": "Besiktas",
-        "cc": "TUR",
-        "val": 15.0,
-        "note": {
-          "en": "impact-sub striker",
-          "zh": "奇兵中锋"
-        }
+        "no": 24,
+        "name": "Kim Jin-gyu",
+        "pos": "CM",
+        "club": "Jeonbuk Hyundai Motors",
+        "cc": "KOR",
+        "val": 1.2
       },
       {
         "no": 17,
@@ -562,35 +762,59 @@ window.WC_SQUADS = {
         "pos": "AM",
         "club": "Stoke City",
         "cc": "ENG",
-        "val": 3.0,
-        "note": {
-          "en": "young creative impact sub",
-          "zh": "年轻的创造型奇兵"
-        }
+        "val": 4.0
       },
       {
-        "no": 8,
-        "name": "Paik Seung-ho",
-        "pos": "CM",
-        "club": "Birmingham City",
-        "cc": "ENG",
-        "val": 4.0,
-        "note": {
-          "en": "midfield depth",
-          "zh": "中场深度"
-        }
-      },
-      {
-        "no": 21,
-        "name": "Jo Hyeon-woo",
-        "pos": "GK",
+        "no": 26,
+        "name": "Lee Dong-gyeong",
+        "pos": "AM",
         "club": "Ulsan HD",
         "cc": "KOR",
-        "val": 1.5,
+        "val": 1.6
+      },
+      {
+        "no": 20,
+        "name": "Yang Hyun-jun",
+        "pos": "RW",
+        "club": "Celtic",
+        "cc": "SCO",
+        "val": 5.0
+      },
+      {
+        "no": 25,
+        "name": "Eom Ji-sung",
+        "pos": "LW",
+        "club": "Swansea City",
+        "cc": "WAL",
+        "val": 1.8
+      },
+      {
+        "no": 11,
+        "name": "Hwang Hee-chan",
+        "pos": "CF",
+        "club": "Wolverhampton Wanderers",
+        "cc": "ENG",
+        "val": 6.0
+      },
+      {
+        "no": 18,
+        "name": "Oh Hyeon-gyu",
+        "pos": "CF",
+        "club": "Beşiktaş",
+        "cc": "TUR",
+        "val": 15.0,
         "note": {
-          "en": "experienced backup keeper",
-          "zh": "经验丰富的替补门将"
+          "en": "Super-sub: scored the 80' winner off the bench vs Czechia.",
+          "zh": "超级替补：替补登场在第80分钟攻入对捷克的制胜球。"
         }
+      },
+      {
+        "no": 9,
+        "name": "Cho Gue-sung",
+        "pos": "CF",
+        "club": "Midtjylland",
+        "cc": "DEN",
+        "val": 2.5
       }
     ],
     "updated": "2026-06-14"
@@ -600,7 +824,7 @@ window.WC_SQUADS = {
     "nameEN": "Czechia",
     "fifaRank": 40,
     "group": "A",
-    "formation": "3-4-2-1",
+    "formation": "5-3-2",
     "manager": "Miroslav Koubek",
     "style": {
       "en": "A compact, disciplined 3-4-2-1 built on a Slavia Prague core: deep defensive structure, hard pressing in central areas, and direct, vertical supply to target man Patrik Schick, with set pieces (Soucek, Krejci) a primary weapon. Main weakness is a thin, low-value creative pool and shaky full-back/wing-back depth that struggles to break down organised low blocks.",
@@ -625,15 +849,31 @@ window.WC_SQUADS = {
         "pos": "GK",
         "club": "PSV Eindhoven",
         "cc": "NED",
-        "val": 8.0
+        "val": 8.0,
+        "note": {
+          "en": "No.1 since Vaclik retired; rising at PSV.",
+          "zh": "瓦茨利克退役后的头号门将，在埃因霍温稳步上升。"
+        }
       },
       {
-        "no": 6,
-        "name": "Chaloupek",
+        "no": 5,
+        "name": "Coufal",
+        "pos": "RWB",
+        "club": "TSG Hoffenheim",
+        "cc": "GER",
+        "val": 2.5,
+        "note": {
+          "en": "Veteran right wing-back; his long throws are a real weapon (assisted Krejci's goal vs Korea).",
+          "zh": "老将右翼卫，长距离手抛球是武器，对韩国助攻克莱伊奇头球破门。"
+        }
+      },
+      {
+        "no": 3,
+        "name": "Holes",
         "pos": "CB",
         "club": "Slavia Prague",
         "cc": "CZE",
-        "val": 10.0
+        "val": 1.0
       },
       {
         "no": 4,
@@ -645,24 +885,52 @@ window.WC_SQUADS = {
       },
       {
         "no": 7,
-        "name": "L. Krejci",
+        "name": "Ladislav Krejci",
         "pos": "CB",
         "club": "Wolverhampton Wanderers",
         "cc": "ENG",
         "val": 22.0,
         "star": true,
         "why": {
-          "en": "Ball-playing captain and defensive leader; a near-£25m Premier League centre-back who anchors the back three and is a set-piece menace.",
-          "zh": "会出球的队长兼防守核心,身价接近2200万的英超中卫,镇守三中卫并是定位球威胁点。"
+          "en": "Captain and the squad's most valuable outfielder; ball-playing CB who scored Czechia's opener vs South Korea.",
+          "zh": "队长，阵中身价最高的球员，善于出球的中卫，对韩国头球先拔头筹。"
         }
       },
       {
-        "no": 5,
-        "name": "Coufal",
-        "pos": "RWB",
-        "club": "TSG Hoffenheim",
-        "cc": "GER",
-        "val": 2.5
+        "no": 24,
+        "name": "Sojka",
+        "pos": "LWB",
+        "club": "Viktoria Plzen",
+        "cc": "CZE",
+        "val": 2.3,
+        "note": {
+          "en": "Listed as a midfielder but deployed as left wing-back in the back five.",
+          "zh": "名册上是中场，实战中在五后卫体系里踢左翼卫。"
+        }
+      },
+      {
+        "no": 18,
+        "name": "Sadilek",
+        "pos": "CM",
+        "club": "Slavia Prague",
+        "cc": "CZE",
+        "val": 8.0,
+        "note": {
+          "en": "Scored the earliest goal of the tournament (6') vs South Africa.",
+          "zh": "对南非第6分钟破门，全届赛事最早进球。"
+        }
+      },
+      {
+        "no": 8,
+        "name": "Darida",
+        "pos": "DM",
+        "club": "Hradec Kralove",
+        "cc": "CZE",
+        "val": 0.38,
+        "note": {
+          "en": "35-year-old former Hertha captain, back home, anchors midfield.",
+          "zh": "35岁前柏林赫塔队长，回归国内联赛，中场定海神针。"
+        }
       },
       {
         "no": 12,
@@ -673,45 +941,15 @@ window.WC_SQUADS = {
         "val": 6.0
       },
       {
-        "no": 22,
-        "name": "Soucek",
-        "pos": "CM",
-        "club": "West Ham United",
-        "cc": "ENG",
+        "no": 9,
+        "name": "Hlozek",
+        "pos": "CF",
+        "club": "TSG Hoffenheim",
+        "cc": "GER",
         "val": 10.0,
-        "star": true,
-        "why": {
-          "en": "Box-to-box engine and aerial weapon; arrives late to attack set pieces and is the team's biggest goal threat from midfield.",
-          "zh": "覆盖全场的发动机加空霸,后插上抢点定位球,是中场最大的进球威胁。"
-        }
-      },
-      {
-        "no": 14,
-        "name": "Jurasek",
-        "pos": "LWB",
-        "club": "Slavia Prague",
-        "cc": "CZE",
-        "val": 5.0
-      },
-      {
-        "no": 17,
-        "name": "Provod",
-        "pos": "AM",
-        "club": "Slavia Prague",
-        "cc": "CZE",
-        "val": 8.0
-      },
-      {
-        "no": 15,
-        "name": "Sulc",
-        "pos": "AM",
-        "club": "Olympique Lyonnais",
-        "cc": "FRA",
-        "val": 20.0,
-        "star": true,
-        "why": {
-          "en": "The squad's most valuable outfielder; a press-resistant No. 10 who supplies the killer pass between the lines for Schick.",
-          "zh": "队内身价最高的非门将球员,抗逼抢的前腰,负责在肋部给希克送出致命传球。"
+        "note": {
+          "en": "Versatile forward, partners Schick up top.",
+          "zh": "全能前锋，与希克搭档锋线。"
         }
       },
       {
@@ -723,22 +961,120 @@ window.WC_SQUADS = {
         "val": 18.0,
         "star": true,
         "why": {
-          "en": "Lone striker and talisman — six goals in seven major-tournament games; Czechia's whole attack funnels through him.",
-          "zh": "单箭头与精神领袖——大赛7场6球,捷克的进攻几乎全围绕他展开。"
+          "en": "Talisman striker, 25 goals in 52 caps and a Bundesliga winner; Czechia's primary goal threat.",
+          "zh": "头号射手，52场国家队25球、德甲冠军，捷克最大的进球威胁。"
         }
       }
     ],
     "subs": [
       {
-        "no": 9,
-        "name": "Hlozek",
-        "pos": "CF",
-        "club": "TSG Hoffenheim",
-        "cc": "GER",
+        "no": 16,
+        "name": "Stanek",
+        "pos": "GK",
+        "club": "Slavia Prague",
+        "cc": "CZE",
+        "val": 2.0
+      },
+      {
+        "no": 23,
+        "name": "Hornicek",
+        "pos": "GK",
+        "club": "Braga",
+        "cc": "POR",
+        "val": 18.0,
+        "note": {
+          "en": "Young keeper whose Braga rise pushed his value above the No.1; one for the future.",
+          "zh": "年轻门将，在布拉加身价飙升超过头号门将，未来之选。"
+        }
+      },
+      {
+        "no": 2,
+        "name": "Zima",
+        "pos": "CB",
+        "club": "Slavia Prague",
+        "cc": "CZE",
+        "val": 7.0
+      },
+      {
+        "no": 6,
+        "name": "Chaloupek",
+        "pos": "CB",
+        "club": "Slavia Prague",
+        "cc": "CZE",
         "val": 10.0,
         "note": {
-          "en": "Versatile attacking sub",
-          "zh": "多面手进攻替补"
+          "en": "Started the opener vs South Korea, rotated out for South Africa.",
+          "zh": "对韩国首发，对南非被轮换。"
+        }
+      },
+      {
+        "no": 14,
+        "name": "Jurasek",
+        "pos": "LB",
+        "club": "Slavia Prague",
+        "cc": "CZE",
+        "val": 5.0
+      },
+      {
+        "no": 20,
+        "name": "Zeleny",
+        "pos": "LB",
+        "club": "Sparta Prague",
+        "cc": "CZE",
+        "val": 0.6
+      },
+      {
+        "no": 21,
+        "name": "Doudera",
+        "pos": "RB",
+        "club": "Slavia Prague",
+        "cc": "CZE",
+        "val": 3.5
+      },
+      {
+        "no": 22,
+        "name": "Soucek",
+        "pos": "DM",
+        "club": "West Ham United",
+        "cc": "ENG",
+        "val": 10.0,
+        "star": true,
+        "why": {
+          "en": "Premier League midfield engine and ex-captain; box-to-box presence and aerial threat, benched vs South Africa but a key starter.",
+          "zh": "英超中场发动机、前队长，攻防转换与争顶能力强，对南非替补但仍是关键主力。"
+        }
+      },
+      {
+        "no": 17,
+        "name": "Provod",
+        "pos": "AM",
+        "club": "Slavia Prague",
+        "cc": "CZE",
+        "val": 8.0,
+        "note": {
+          "en": "Creative starter vs South Korea; left-footed playmaker.",
+          "zh": "对韩国首发的创造者，左脚组织核心。"
+        }
+      },
+      {
+        "no": 25,
+        "name": "Sochurek",
+        "pos": "CM",
+        "club": "Sparta Prague",
+        "cc": "CZE",
+        "val": 3.5
+      },
+      {
+        "no": 15,
+        "name": "Sulc",
+        "pos": "AM",
+        "club": "Lyon",
+        "cc": "FRA",
+        "val": 20.0,
+        "star": true,
+        "why": {
+          "en": "Squad's joint-most-valuable player; €20m Lyon attacking midfielder Lyon reportedly rate near €45-50m.",
+          "zh": "阵中身价并列最高，里昂攻击型中场，俱乐部内部估值近4500-5000万欧。"
         }
       },
       {
@@ -747,47 +1083,35 @@ window.WC_SQUADS = {
         "pos": "ST",
         "club": "Sparta Prague",
         "cc": "CZE",
-        "val": 2.7,
-        "note": {
-          "en": "Pressing No. 9 off the bench",
-          "zh": "逼抢型替补中锋"
-        }
+        "val": 2.7
       },
       {
-        "no": 16,
-        "name": "Stanek",
-        "pos": "GK",
+        "no": 13,
+        "name": "Chytil",
+        "pos": "CF",
         "club": "Slavia Prague",
         "cc": "CZE",
-        "val": 2.0,
-        "note": {
-          "en": "Backup keeper",
-          "zh": "替补门将"
-        }
-      },
-      {
-        "no": 21,
-        "name": "Doudera",
-        "pos": "RWB",
-        "club": "Slavia Prague",
-        "cc": "CZE",
-        "val": 3.0,
-        "note": {
-          "en": "Wing-back depth",
-          "zh": "翼卫轮换"
-        }
+        "val": 4.0
       },
       {
         "no": 19,
         "name": "Chory",
-        "pos": "CF",
+        "pos": "ST",
         "club": "Slavia Prague",
         "cc": "CZE",
         "val": 2.7,
         "note": {
-          "en": "Target-man Plan B",
-          "zh": "高中锋B计划"
+          "en": "Towering target-man option off the bench.",
+          "zh": "高中锋，替补奇兵。"
         }
+      },
+      {
+        "no": 26,
+        "name": "Visinsky",
+        "pos": "RW",
+        "club": "Viktoria Plzen",
+        "cc": "CZE",
+        "val": 3.0
       }
     ],
     "updated": "2026-06-14"
@@ -797,7 +1121,7 @@ window.WC_SQUADS = {
     "nameEN": "Canada",
     "fifaRank": 30,
     "group": "B",
-    "formation": "4-3-3",
+    "formation": "4-4-2",
     "manager": "Jesse Marsch",
     "style": {
       "en": "High-energy, vertical pressing under Jesse Marsch — Canada win the ball high and counter at pace through fast wide players, with Jonathan David as the focal point. Their main weakness is squad depth and finishing quality once the press is bypassed, plus heavy reliance on a possibly half-fit Alphonso Davies.",
@@ -818,176 +1142,236 @@ window.WC_SQUADS = {
     "xi": [
       {
         "no": 16,
-        "name": "Maxime Crépeau",
+        "name": "Crépeau",
         "pos": "GK",
-        "club": "Orlando City",
+        "club": "Orlando City SC",
         "cc": "USA",
-        "val": 2.5
+        "val": 1.8
       },
       {
         "no": 2,
-        "name": "Alistair Johnston",
+        "name": "Johnston",
         "pos": "RB",
         "club": "Celtic",
         "cc": "SCO",
-        "val": 8.0,
-        "star": true,
-        "why": {
-          "en": "Relentless overlapping right-back and Celtic mainstay — Canada's most consistent defender and a key outlet down the right.",
-          "zh": "不知疲倦的右路插上型边后卫、凯尔特人主力——加拿大最稳定的后卫和右路重要出球点。"
-        }
-      },
-      {
-        "no": 15,
-        "name": "Moïse Bombito",
-        "pos": "CB",
-        "club": "Nice",
-        "cc": "FRA",
-        "val": 7.0
+        "val": 8.0
       },
       {
         "no": 13,
-        "name": "Derek Cornelius",
+        "name": "Cornelius",
         "pos": "CB",
-        "club": "Marseille",
-        "cc": "FRA",
-        "val": 2.5,
-        "note": {
-          "en": "On loan at Rangers from Marseille",
-          "zh": "租借至流浪者，母队马赛"
-        }
+        "club": "Rangers",
+        "cc": "SCO",
+        "val": 2.5
+      },
+      {
+        "no": 4,
+        "name": "de Fougerolles",
+        "pos": "CB",
+        "club": "Dender EH",
+        "cc": "BEL",
+        "val": 1.0
       },
       {
         "no": 22,
-        "name": "Richie Laryea",
+        "name": "Laryea",
         "pos": "LB",
         "club": "Toronto FC",
         "cc": "CAN",
-        "val": 1.5,
-        "note": {
-          "en": "Starts LB while Davies is doubtful",
-          "zh": "戴维斯伤情存疑时首发左后卫"
-        }
+        "val": 1.0
+      },
+      {
+        "no": 17,
+        "name": "Buchanan",
+        "pos": "RM",
+        "club": "Villarreal CF",
+        "cc": "ESP",
+        "val": 12.0
       },
       {
         "no": 7,
-        "name": "Stephen Eustaquio",
+        "name": "Eustáquio",
         "pos": "CM",
-        "club": "LAFC",
+        "club": "Los Angeles FC",
         "cc": "USA",
         "val": 6.0
       },
       {
         "no": 8,
-        "name": "Ismaël Koné",
+        "name": "Koné",
         "pos": "CM",
         "club": "Sassuolo",
         "cc": "ITA",
-        "val": 25.0
-      },
-      {
-        "no": 17,
-        "name": "Tajon Buchanan",
-        "pos": "RW",
-        "club": "Villarreal",
-        "cc": "ESP",
-        "val": 12.0
+        "val": 25.0,
+        "star": true,
+        "why": {
+          "en": "Box-to-box engine; carries and breaks lines from deep, Canada's midfield heartbeat.",
+          "zh": "全能中场发动机，从后场带球、撕开防线，是加拿大中场的心脏。"
+        }
       },
       {
         "no": 20,
-        "name": "Ali Ahmed",
-        "pos": "LW",
+        "name": "Ahmed",
+        "pos": "LM",
         "club": "Norwich City",
         "cc": "ENG",
         "val": 5.0
       },
       {
-        "no": 9,
-        "name": "Cyle Larin",
-        "pos": "CF",
-        "club": "Southampton",
-        "cc": "ENG",
-        "val": 2.5
-      },
-      {
         "no": 10,
-        "name": "Jonathan David",
+        "name": "David",
         "pos": "ST",
         "club": "Juventus",
         "cc": "ITA",
         "val": 30.0,
         "star": true,
         "why": {
-          "en": "Canada's talisman striker — clinical finisher who joined Juventus and carries the bulk of the team's goal threat.",
-          "zh": "加拿大锋线核心——冷静高效的射手，已加盟尤文图斯，承担球队大部分进球威胁。"
+          "en": "Juventus striker and Canada's record scorer — clinical, mobile, the focal point up top.",
+          "zh": "尤文前锋、加拿大队史射手王，冷静、灵活，是锋线核心。"
         }
+      },
+      {
+        "no": 9,
+        "name": "Larin",
+        "pos": "ST",
+        "club": "Southampton",
+        "cc": "ENG",
+        "val": 2.5
       }
     ],
     "subs": [
       {
+        "no": 1,
+        "name": "St. Clair",
+        "pos": "GK",
+        "club": "Inter Miami CF",
+        "cc": "USA",
+        "val": 3.5
+      },
+      {
+        "no": 18,
+        "name": "Goodman",
+        "pos": "GK",
+        "club": "Barnsley",
+        "cc": "ENG",
+        "val": 0.55
+      },
+      {
         "no": 19,
-        "name": "Alphonso Davies",
+        "name": "Davies",
         "pos": "LB",
         "club": "Bayern Munich",
         "cc": "GER",
         "val": 40.0,
         "star": true,
         "why": {
-          "en": "World-class flying left-back and captain — if his hamstring heals he transforms Canada's attack from the left flank.",
-          "zh": "世界级的进攻型左后卫和队长——若大腿伤愈，他将从左路彻底激活加拿大的进攻。"
+          "en": "Bayern flyer and captain returning from ACL injury — Canada's highest-ceiling, game-breaking talent.",
+          "zh": "拜仁边路飞翼兼队长，刚从十字韧带伤愈复出，是加拿大上限最高、能一锤定音的球员。"
         },
         "note": {
-          "en": "Captain; injury return",
-          "zh": "队长；伤愈待复出"
+          "en": "Started on the bench vs Qatar while managing his return to fitness; expected to reclaim a starting role.",
+          "zh": "对卡塔尔一役因复出节奏控制而替补登场，预计将重夺首发位置。"
         }
       },
       {
-        "no": 24,
-        "name": "Promise David",
-        "pos": "ST",
-        "club": "Union Saint-Gilloise",
-        "cc": "BEL",
-        "val": 17.0,
+        "no": 15,
+        "name": "Bombito",
+        "pos": "CB",
+        "club": "OGC Nice",
+        "cc": "FRA",
+        "val": 7.0,
         "note": {
-          "en": "Impact sub striker",
-          "zh": "奇兵替补前锋"
+          "en": "Physical, ball-carrying center-back and a likely starter once fully rotated in.",
+          "zh": "身体强壮、善于带球出球的中卫，轮换到位后很可能进入首发。"
         }
+      },
+      {
+        "no": 3,
+        "name": "Jones",
+        "pos": "CB",
+        "club": "Middlesbrough",
+        "cc": "ENG",
+        "val": 6.0
+      },
+      {
+        "no": 5,
+        "name": "Waterman",
+        "pos": "CB",
+        "club": "Chicago Fire FC",
+        "cc": "USA",
+        "val": 2.0
+      },
+      {
+        "no": 23,
+        "name": "Sigur",
+        "pos": "DM",
+        "club": "Hajduk Split",
+        "cc": "CRO",
+        "val": 4.0
       },
       {
         "no": 25,
-        "name": "Nathan Saliba",
+        "name": "Saliba",
         "pos": "CM",
         "club": "Anderlecht",
         "cc": "BEL",
-        "val": 7.5,
-        "note": {
-          "en": "Midfield depth",
-          "zh": "中场深度"
-        }
+        "val": 7.5
+      },
+      {
+        "no": 6,
+        "name": "Choinière",
+        "pos": "CM",
+        "club": "Los Angeles FC",
+        "cc": "USA",
+        "val": 1.0
+      },
+      {
+        "no": 21,
+        "name": "Osorio",
+        "pos": "AM",
+        "club": "Toronto FC",
+        "cc": "CAN",
+        "val": 1.0
+      },
+      {
+        "no": 11,
+        "name": "Millar",
+        "pos": "LW",
+        "club": "Hull City",
+        "cc": "ENG",
+        "val": 3.0
+      },
+      {
+        "no": 14,
+        "name": "Shaffelburg",
+        "pos": "LW",
+        "club": "Los Angeles FC",
+        "cc": "USA",
+        "val": 2.5
+      },
+      {
+        "no": 26,
+        "name": "Nelson",
+        "pos": "RW",
+        "club": "Austin FC",
+        "cc": "USA",
+        "val": 2.0
+      },
+      {
+        "no": 24,
+        "name": "P. David",
+        "pos": "CF",
+        "club": "Union Saint-Gilloise",
+        "cc": "BEL",
+        "val": 17.0
       },
       {
         "no": 12,
-        "name": "Tani Oluwaseyi",
+        "name": "Oluwaseyi",
         "pos": "CF",
-        "club": "Villarreal",
+        "club": "Villarreal CF",
         "cc": "ESP",
-        "val": 7.0,
-        "note": {
-          "en": "Pace off the bench",
-          "zh": "替补登场的速度型前锋"
-        }
-      },
-      {
-        "no": 1,
-        "name": "Dayne St. Clair",
-        "pos": "GK",
-        "club": "Inter Miami",
-        "cc": "USA",
-        "val": 3.5,
-        "note": {
-          "en": "Alternate keeper",
-          "zh": "轮换门将"
-        }
+        "val": 7.0
       }
     ],
     "updated": "2026-06-14"
@@ -1022,7 +1406,7 @@ window.WC_SQUADS = {
         "pos": "GK",
         "club": "FC St. Pauli",
         "cc": "GER",
-        "val": 2.4
+        "val": 4.5
       },
       {
         "no": 7,
@@ -1030,20 +1414,7 @@ window.WC_SQUADS = {
         "pos": "RB",
         "club": "Benfica",
         "cc": "POR",
-        "val": 16.0,
-        "star": true,
-        "why": {
-          "en": "The squad's most progressive full-back; an overlapping, ball-carrying right-back from a Champions League club who drives Bosnia's right side.",
-          "zh": "全队最具推进能力的边卫，效力欧冠球队的插上型右后卫，是波黑右路进攻的发动机。"
-        }
-      },
-      {
-        "no": 4,
-        "name": "Tarik Muharemovic",
-        "pos": "CB",
-        "club": "Sassuolo",
-        "cc": "ITA",
-        "val": 17.0
+        "val": 16.0
       },
       {
         "no": 18,
@@ -1054,20 +1425,38 @@ window.WC_SQUADS = {
         "val": 1.8
       },
       {
+        "no": 4,
+        "name": "Tarik Muharemovic",
+        "pos": "CB",
+        "club": "Sassuolo",
+        "cc": "ITA",
+        "val": 25.0,
+        "star": true,
+        "why": {
+          "en": "23-year-old ball-playing centre-back, the squad's most valuable asset and defensive linchpin.",
+          "zh": "23岁出球型中卫，全队身价最高、防线核心。"
+        }
+      },
+      {
         "no": 5,
         "name": "Sead Kolasinac",
         "pos": "LB",
         "club": "Atalanta",
         "cc": "ITA",
-        "val": 5.6
+        "val": 4.0
       },
       {
-        "no": 15,
-        "name": "Amar Memic",
+        "no": 19,
+        "name": "Kerim Alajbegovic",
         "pos": "RM",
-        "club": "Viktoria Plzen",
-        "cc": "CZE",
-        "val": 2.4
+        "club": "RB Salzburg",
+        "cc": "AUT",
+        "val": 22.0,
+        "star": true,
+        "why": {
+          "en": "18-year-old Salzburg wonderkid, €22m and starting on the wing — Bosnia's future.",
+          "zh": "18岁萨尔茨堡新星，身价2200万欧已首发边路，波黑的未来。"
+        }
       },
       {
         "no": 6,
@@ -1075,7 +1464,7 @@ window.WC_SQUADS = {
         "pos": "CM",
         "club": "Brondby IF",
         "cc": "DEN",
-        "val": 4.3
+        "val": 4.5
       },
       {
         "no": 14,
@@ -1083,15 +1472,15 @@ window.WC_SQUADS = {
         "pos": "DM",
         "club": "Pafos FC",
         "cc": "CYP",
-        "val": 1.8
+        "val": 2.0
       },
       {
-        "no": 19,
-        "name": "Kerim Alajbegovic",
+        "no": 15,
+        "name": "Amar Memic",
         "pos": "LM",
-        "club": "Red Bull Salzburg",
-        "cc": "AUT",
-        "val": 5.2
+        "club": "Viktoria Plzen",
+        "cc": "CZE",
+        "val": 4.5
       },
       {
         "no": 10,
@@ -1099,12 +1488,7 @@ window.WC_SQUADS = {
         "pos": "CF",
         "club": "VfB Stuttgart",
         "cc": "GER",
-        "val": 20.6,
-        "star": true,
-        "why": {
-          "en": "Bosnia's most valuable player and tactical fulcrum — a Bundesliga forward who presses, links play and creates the space Dzeko finishes in.",
-          "zh": "波黑身价最高、战术支点级别的球员——德甲前锋，能逼抢、串联，为哲科创造终结空间。"
-        }
+        "val": 22.0
       },
       {
         "no": 11,
@@ -1112,41 +1496,65 @@ window.WC_SQUADS = {
         "pos": "ST",
         "club": "Schalke 04",
         "cc": "GER",
-        "val": 1.5,
+        "val": 1.0,
         "star": true,
         "why": {
-          "en": "At 40, the captain and record scorer (73+ goals) plays his final World Cup as Bosnia's emotional and penalty-box reference point.",
-          "zh": "40 岁队长、队史第一射手(73+ 球)出战最后一届世界杯，是波黑禁区内的精神与终结核心。"
+          "en": "40-year-old captain and all-time top scorer (73 goals, 148 caps) leading a second-ever World Cup.",
+          "zh": "40岁队长、队史第一射手（73球148场），率队第二次出征世界杯。"
         }
       }
     ],
     "subs": [
       {
-        "no": 20,
-        "name": "Esmir Bajraktarevic",
-        "pos": "RW",
-        "club": "PSV Eindhoven",
-        "cc": "NED",
-        "val": 6.5,
-        "why": {
-          "en": "USA-born winger at PSV brings direct dribbling and pace off the bench — the team's brightest young attacking talent.",
-          "zh": "美国出生、效力 PSV 的边锋，替补登场带来直接的盘带和速度，是球队最亮眼的年轻攻击手。"
-        },
-        "note": {
-          "en": "impact sub",
-          "zh": "奇兵替补"
-        }
+        "no": 12,
+        "name": "Mladen Jurkas",
+        "pos": "GK",
+        "club": "Borac Banja Luka",
+        "cc": "BIH",
+        "val": 0.7
       },
       {
-        "no": 23,
-        "name": "Haris Tabakovic",
-        "pos": "ST",
-        "club": "Borussia Monchengladbach",
-        "cc": "GER",
-        "val": 3.5,
+        "no": 22,
+        "name": "Martin Zlomislic",
+        "pos": "GK",
+        "club": "HNK Rijeka",
+        "cc": "CRO",
+        "val": 2.0
+      },
+      {
+        "no": 2,
+        "name": "Nihad Mujakic",
+        "pos": "CB",
+        "club": "Gaziantep FK",
+        "cc": "TUR",
+        "val": 1.2
+      },
+      {
+        "no": 3,
+        "name": "Dennis Hadzikadunic",
+        "pos": "CB",
+        "club": "Sampdoria",
+        "cc": "ITA",
+        "val": 1.2
+      },
+      {
+        "no": 21,
+        "name": "Stjepan Radeljic",
+        "pos": "CB",
+        "club": "HNK Rijeka",
+        "cc": "CRO",
+        "val": 2.8
+      },
+      {
+        "no": 24,
+        "name": "Arjan Malic",
+        "pos": "RB",
+        "club": "Sturm Graz",
+        "cc": "AUT",
+        "val": 1.8,
         "note": {
-          "en": "target-man option",
-          "zh": "高中锋选项"
+          "en": "Late call-up replacing the injured Nidal Celik (Lens).",
+          "zh": "替补受伤的尼达尔·切利克（朗斯）临时入选。"
         }
       },
       {
@@ -1155,23 +1563,15 @@ window.WC_SQUADS = {
         "pos": "CM",
         "club": "Young Boys",
         "cc": "SUI",
-        "val": 2.3,
-        "note": {
-          "en": "engine-room depth",
-          "zh": "中场轮换"
-        }
+        "val": 2.5
       },
       {
-        "no": 9,
-        "name": "Samed Bazdar",
-        "pos": "ST",
-        "club": "Jagiellonia Bialystok",
-        "cc": "POL",
-        "val": 1.4,
-        "note": {
-          "en": "young striker",
-          "zh": "年轻前锋"
-        }
+        "no": 13,
+        "name": "Ivan Basic",
+        "pos": "CM",
+        "club": "FC Astana",
+        "cc": "KAZ",
+        "val": 1.5
       },
       {
         "no": 16,
@@ -1179,11 +1579,59 @@ window.WC_SQUADS = {
         "pos": "DM",
         "club": "Hull City",
         "cc": "ENG",
-        "val": 2.0,
+        "val": 4.0
+      },
+      {
+        "no": 17,
+        "name": "Dzenis Burnic",
+        "pos": "DM",
+        "club": "Karlsruher SC",
+        "cc": "GER",
+        "val": 1.2
+      },
+      {
+        "no": 26,
+        "name": "Ermin Mahmic",
+        "pos": "AM",
+        "club": "Slovan Liberec",
+        "cc": "CZE",
+        "val": 5.0
+      },
+      {
+        "no": 9,
+        "name": "Samed Bazdar",
+        "pos": "CF",
+        "club": "Jagiellonia Bialystok",
+        "cc": "POL",
+        "val": 1.5
+      },
+      {
+        "no": 20,
+        "name": "Esmir Bajraktarevic",
+        "pos": "RW",
+        "club": "PSV Eindhoven",
+        "cc": "NED",
+        "val": 8.0,
         "note": {
-          "en": "holding-mid cover",
-          "zh": "后腰替补"
+          "en": "21-year-old PSV winger who scored the winning playoff penalty vs Italy.",
+          "zh": "21岁埃因霍温边锋，附加赛对意大利罚进制胜点球。"
         }
+      },
+      {
+        "no": 23,
+        "name": "Haris Tabakovic",
+        "pos": "CF",
+        "club": "Borussia Monchengladbach",
+        "cc": "GER",
+        "val": 3.5
+      },
+      {
+        "no": 25,
+        "name": "Jovo Lukic",
+        "pos": "CF",
+        "club": "Universitatea Cluj",
+        "cc": "ROU",
+        "val": 2.2
       }
     ],
     "updated": "2026-06-14"
@@ -1697,7 +2145,7 @@ window.WC_SQUADS = {
         "pos": "LW",
         "club": "Real Madrid",
         "cc": "ESP",
-        "val": 100.0,
+        "val": 150.0,
         "star": true,
         "why": {
           "en": "The team's match-winner and most valuable asset; unplayable one-on-one when in form.",
@@ -1780,7 +2228,7 @@ window.WC_SQUADS = {
         }
       }
     ],
-    "updated": "2026-06-14"
+    "updated": "2026-06-22"
   },
   "mar": {
     "code": "mar",
@@ -5628,7 +6076,7 @@ window.WC_SQUADS = {
         "pos": "CM",
         "club": "Barcelona",
         "cc": "ESP",
-        "val": 140.0
+        "val": 150.0
       },
       {
         "no": 19,
@@ -5730,7 +6178,7 @@ window.WC_SQUADS = {
         }
       }
     ],
-    "updated": "2026-06-14"
+    "updated": "2026-06-22"
   },
   "cpv": {
     "code": "cpv",
@@ -8834,7 +9282,7 @@ window.WC_SQUADS = {
         "pos": "AM",
         "club": "Real Madrid",
         "cc": "ESP",
-        "val": 130.0,
+        "val": 140.0,
         "star": true,
         "why": {
           "en": "The squad's most valuable player and creative heartbeat; arrives late in the box and produces decisive moments.",
@@ -8920,7 +9368,7 @@ window.WC_SQUADS = {
         }
       }
     ],
-    "updated": "2026-06-14"
+    "updated": "2026-06-22"
   },
   "cro": {
     "code": "cro",

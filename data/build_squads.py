@@ -124,11 +124,14 @@ def clean_team(t):
     out["updated"] = str(t.get("updated") or DEFAULT_UPDATED)
     if len(out["xi"]) != 11:
         warnings.append(f"{code}: XI has {len(out['xi'])} players (expected 11)")
-    # duplicate shirt-number check within the XI
-    nums = [p["no"] for p in out["xi"]]
+    # duplicate shirt-number check across the WHOLE squad (xi + subs)
+    allp = out["xi"] + out["subs"]
+    nums = [p["no"] for p in allp]
     dupes = {n for n in nums if nums.count(n) > 1 and n}
     if dupes:
-        warnings.append(f"{code}: duplicate XI shirt numbers {sorted(dupes)}")
+        warnings.append(f"{code}: duplicate squad shirt numbers {sorted(dupes)}")
+    if len(allp) < 20:
+        warnings.append(f"{code}: only {len(allp)} players total (expected ~26)")
     return out
 
 
