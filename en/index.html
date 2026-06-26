@@ -76,7 +76,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = { tab:'sched', filter:'all', groupSel:'', rank:{}, thirds:{}, winners:{}, shareImg:null,
-      odds:{}, champ:null, oddsAt:null, detail:null };
+      odds:{}, champ:null, oddsAt:null, detail:null, results:{}, resultsAt:null };
     this.bracketRef = createRef();
     this.SQUADS = window.WC_SQUADS || {};
     this.LG = 'en';
@@ -185,6 +185,29 @@ class App extends Component {
     this.WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     /* position codes are shown as-is in EN */
     this.POSL = {};
+    /* club-country code → league short name, for the per-match composition strip */
+    this.LEAGUE = { ENG:'Premier Lg', ESP:'La Liga', ITA:'Serie A', GER:'Bundesliga', FRA:'Ligue 1',
+      NED:'Eredivisie', POR:'Liga POR', KSA:'Saudi PL', SAU:'Saudi PL', USA:'MLS', TUR:'Süper Lig',
+      BEL:'Pro League', SCO:'Scot Prem', BRA:'Brasileirão', ARG:'Argentina', MEX:'Liga MX', SUI:'Swiss SL',
+      GRE:'Greece', RUS:'Russia', AUT:'Austria', CRO:'Croatia', JPN:'J-League', KOR:'K-League',
+      QAT:'Qatar SL', EGY:'Egypt PL', IRN:'Iran PL', UAE:'UAE', POL:'Poland', SRB:'Serbia', UKR:'Ukraine', DEN:'Denmark' };
+  }
+
+  /* per-match "league composition" strip — where both projected XIs play their club football */
+  leagueStrip(t1, t2){
+    const s1 = this.SQ(t1), s2 = this.SQ(t2);
+    const players = [].concat(s1 ? s1.xi : [], s2 ? s2.xi : []);
+    if (!players.length) return '';
+    const counts = {};
+    players.forEach(p => { const lg = this.LEAGUE[p.cc] || p.cc || '?'; counts[lg] = (counts[lg] || 0) + 1; });
+    const rows = Object.keys(counts).map(k => ({ name: k, n: counts[k] })).sort((a, b) => b.n - a.n);
+    return html`
+    <div style="background:#FFFFFF;border:1px solid #DCD6C2;border-radius:14px;padding:11px 14px;margin-bottom:12px">
+      <div style="font-size:11px;letter-spacing:1.5px;color:#8B8770;font-weight:700;margin-bottom:8px">LEAGUE MIX · BOTH PROJECTED XIS</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${rows.map(r => html`<span style="font-size:12px;font-weight:600;color:#3D443C;background:#F4F1E6;border-radius:6px;padding:3px 9px">${r.name} <b style="color:#191D17">${r.n}</b></span>`)}
+      </div>
+    </div>`;
   }
 
   /* ---------- squad / scouting helpers ---------- */
@@ -269,7 +292,7 @@ class App extends Component {
         <div style="margin-top:3px">${(t.xi||[]).map(p => this.playerRow(p))}</div>
         ${(t.subs||[]).length > 0 && html`
           <div style="margin-top:13px;display:flex;align-items:baseline;gap:8px">
-            <span style="font-family:'Barlow Condensed','Noto Sans SC',sans-serif;font-size:17px;font-weight:700">Key subs</span>
+            <span style="font-family:'Barlow Condensed','Noto Sans SC',sans-serif;font-size:17px;font-weight:700">Bench</span>
             <span style="font-size:11px;color:#6F6856">${t.subs.length}</span>
           </div>
           <div style="margin-top:3px">${t.subs.map(p => html`
@@ -291,7 +314,7 @@ class App extends Component {
       const [no, date, grp, t1, t2, vk] = gm, V = this.VEN[vk];
       title = this.T(t1) + ' vs ' + this.T(t2);
       sub = 'M' + no + ' · ' + this.fmtD(date) + ' ' + this.fmtW(date) + ' · ' + V[0] + ' · ' + V[1];
-      bodies = [this.teamScoutCard(t1), this.teamScoutCard(t2)];
+      bodies = [this.leagueStrip(t1, t2), this.teamScoutCard(t1), this.teamScoutCard(t2)];
     } else {
       const T = this.TEAMS[d.code];
       title = (T ? T[1] + ' ' + T[0] : d.code) + ' — squad';
@@ -326,8 +349,10 @@ class App extends Component {
     } catch(e) {}
     this.fetchOdds();
     this._oddsTimer = setInterval(() => this.fetchOdds(), 5 * 60 * 1000);
+    this.fetchResults();
+    this._resTimer = setInterval(() => this.fetchResults(), 3 * 60 * 1000);
   }
-  componentWillUnmount(){ clearInterval(this._oddsTimer); }
+  componentWillUnmount(){ clearInterval(this._oddsTimer); clearInterval(this._resTimer); }
 
   /* ---------- Polymarket odds ---------- */
   marketProb(mk){
@@ -380,6 +405,136 @@ class App extends Component {
     this.setState({ odds: Object.keys(odds).length ? { ...this.state.odds, ...odds } : this.state.odds, champ: champ || this.state.champ, oddsAt: new Date() });
     } finally { this._fetching = false; }
   }
+
+  /* ---------- live results (ESPN public API) ---------- */
+  fetchResults(){
+    if (this._fetchingR) return;
+    this._fetchingR = true;
+    fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=20260611-20260719')
+      .then(r => r.json())
+      .then(j => {
+        const byPair = {};
+        (j.events || []).forEach(ev => {
+          const c = ev.competitions && ev.competitions[0];
+          if (!c || !c.competitors || c.competitors.length !== 2) return;
+          const cs = c.competitors.map(x => ({ code: ((x.team && x.team.abbreviation) || '').toLowerCase(), sc: parseInt(x.score, 10) }));
+          const tp = (c.status && c.status.type) || {};
+          const fin = !!tp.completed, live = tp.state === 'in';
+          if (!fin && !live) return;
+          if (cs.some(x => !x.code || isNaN(x.sc))) return;
+          const wc = c.competitors.find(z => z.winner);
+          const win = wc ? ((wc.team && wc.team.abbreviation) || '').toLowerCase() : null;
+          const [x, y] = cs[0].code < cs[1].code ? [cs[0], cs[1]] : [cs[1], cs[0]];
+          byPair[x.code + '|' + y.code] = { a: x.code, b: y.code, sa: x.sc, sb: y.sc, fin, live, win };
+        });
+        if (Object.keys(byPair).length) this.setState({ results: byPair, resultsAt: new Date() });
+      })
+      .catch(() => {})
+      .finally(() => { this._fetchingR = false; });
+  }
+
+  matchResult(t1, t2){
+    const r = (this.state.results || {})[[t1, t2].sort().join('|')];
+    if (!r) return null;
+    return { s1: r.a === t1 ? r.sa : r.sb, s2: r.a === t1 ? r.sb : r.sa, fin: r.fin, live: r.live, win: r.win };
+  }
+
+  fifaRankOf(code){ const s = this.SQ(code); return (s && s.fifaRank) || 999; }
+
+  groupTable(g){
+    const res = this.state.results || {}, teams = this.GROUPS[g];
+    const st = {}; teams.forEach(t => st[t] = { code: t, pl: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 });
+    let played = 0;
+    for (let i = 0; i < teams.length; i++) for (let j = i + 1; j < teams.length; j++) {
+      const a = teams[i], b = teams[j], m = res[[a, b].sort().join('|')];
+      if (!m || !m.fin) continue;
+      played++;
+      const sa = m.a === a ? m.sa : m.sb, sb = m.a === a ? m.sb : m.sa;
+      st[a].pl++; st[b].pl++; st[a].gf += sa; st[a].ga += sb; st[b].gf += sb; st[b].ga += sa;
+      if (sa > sb) { st[a].w++; st[b].l++; st[a].pts += 3; }
+      else if (sa < sb) { st[b].w++; st[a].l++; st[b].pts += 3; }
+      else { st[a].d++; st[b].d++; st[a].pts++; st[b].pts++; }
+    }
+    teams.forEach(t => st[t].gd = st[t].gf - st[t].ga);
+    return { rows: this.rankTeams(teams.map(t => st[t]), res), played, complete: played === 6 };
+  }
+
+  rankTeams(arr, res){
+    const sorted = arr.slice().sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf);
+    const out = [];
+    let i = 0;
+    while (i < sorted.length) {
+      let j = i + 1;
+      while (j < sorted.length && sorted[j].pts === sorted[i].pts && sorted[j].gd === sorted[i].gd && sorted[j].gf === sorted[i].gf) j++;
+      const tied = sorted.slice(i, j);
+      if (tied.length > 1) {
+        const h = {}; tied.forEach(t => h[t.code] = { pts: 0, gd: 0, gf: 0 });
+        for (let a = 0; a < tied.length; a++) for (let b = a + 1; b < tied.length; b++) {
+          const ca = tied[a].code, cb = tied[b].code, m = res[[ca, cb].sort().join('|')];
+          if (!m || !m.fin) continue;
+          const sa = m.a === ca ? m.sa : m.sb, sb = m.a === ca ? m.sb : m.sa;
+          h[ca].gf += sa; h[cb].gf += sb; h[ca].gd += sa - sb; h[cb].gd += sb - sa;
+          if (sa > sb) h[ca].pts += 3; else if (sa < sb) h[cb].pts += 3; else { h[ca].pts++; h[cb].pts++; }
+        }
+        tied.sort((x, y) => h[y.code].pts - h[x.code].pts || h[y.code].gd - h[x.code].gd || h[y.code].gf - h[x.code].gf || this.fifaRankOf(x.code) - this.fifaRankOf(y.code));
+      }
+      tied.forEach(t => out.push(t)); i = j;
+    }
+    return out;
+  }
+
+  /* ---------- real bracket (auto-fill from results) ---------- */
+  realData(){
+    if (this._rdKey === this.state && this._rd) return this._rd;
+    const realRank = {};
+    Object.keys(this.GROUPS).forEach(g => { const t = this.groupTable(g); if (t.complete) realRank[g] = t.rows.map(r => r.code); });
+    const realThirds = this.computeRealThirds(realRank);
+    const realWinners = {};
+    const side = (m, sd) => {
+      const s = m[sd];
+      if (s.k === 'w') return realRank[s.g] ? realRank[s.g][0] : ((this.state.rank[s.g] || [])[0] || null);
+      if (s.k === 'r') return realRank[s.g] ? realRank[s.g][1] : ((this.state.rank[s.g] || [])[1] || null);
+      if (s.k === 't') return (realThirds && realThirds[m.no + sd]) || this.state.thirds[m.no + sd] || null;
+      if (s.k === 'f') return realWinners[s.m] || this.state.winners[s.m] || null;
+      if (s.k === 'l') { const fm = this.KOMAP[s.m], a = side(fm, 'a'), b = side(fm, 'b'), w = realWinners[s.m] || this.state.winners[s.m]; if (!a || !b || !w) return null; return w === a ? b : a; }
+      return null;
+    };
+    this.KO.forEach(m => {
+      const a = side(m, 'a'), b = side(m, 'b');
+      if (a && b) { const r = this.matchResult(a, b); if (r && r.fin) realWinners[m.no] = r.win || (r.s1 > r.s2 ? a : (r.s2 > r.s1 ? b : null)); }
+    });
+    this._rd = { realRank, realThirds, realWinners }; this._rdKey = this.state;
+    return this._rd;
+  }
+
+  computeRealThirds(realRank){
+    const groups = Object.keys(this.GROUPS);
+    if (groups.some(g => !realRank[g])) return null;
+    let thirds = groups.map(g => ({ ...this.groupTable(g).rows[2], g }));
+    thirds = thirds.sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf || this.fifaRankOf(x.code) - this.fifaRankOf(y.code)).slice(0, 8);
+    const qual = thirds.map(t => t.g), slots = [];
+    this.KO.filter(m => m.no <= 88).forEach(m => ['a', 'b'].forEach(sd => { if (m[sd].k === 't') slots.push({ key: m.no + sd, gs: m[sd].gs }); }));
+    const used = {}, assign = {};
+    const solve = i => {
+      if (i === slots.length) return true;
+      for (const g of slots[i].gs) { if (qual.includes(g) && !used[g]) { used[g] = true; assign[slots[i].key] = g; if (solve(i + 1)) return true; used[g] = false; delete assign[slots[i].key]; } }
+      return false;
+    };
+    if (!solve(0)) return null;
+    const byG = {}; thirds.forEach(t => byG[t.g] = t.code);
+    const out = {}; Object.keys(assign).forEach(k => out[k] = byG[assign[k]]); return out;
+  }
+
+  realSide(m, sd){
+    const R = this.realData(), s = m[sd];
+    if (s.k === 'w') return R.realRank[s.g] ? R.realRank[s.g][0] : null;
+    if (s.k === 'r') return R.realRank[s.g] ? R.realRank[s.g][1] : null;
+    if (s.k === 't') return (R.realThirds && R.realThirds[m.no + sd]) || null;
+    if (s.k === 'f') return R.realWinners[s.m] || null;
+    if (s.k === 'l') { if (R.realWinners[s.m] == null) return null; const fm = this.KOMAP[s.m], a = this.resolveSideReal(fm, 'a'), b = this.resolveSideReal(fm, 'b'); if (!a || !b) return null; return R.realWinners[s.m] === a ? b : a; }
+    return null;
+  }
+  resolveSideReal(m, sd){ return this.realSide(m, sd) || this.resolveSide(this.state, m, sd); }
 
   persist(ns){
     clearTimeout(this._pt);
@@ -470,26 +625,28 @@ class App extends Component {
 
   /* ---------- bracket card builders ---------- */
   koSide(m, sd){
-    const st = this.state, s = m[sd], key = m.no + sd;
-    const resolved = this.resolveSide(st, m, sd);
-    const opp = this.resolveSide(st, m, sd === 'a' ? 'b' : 'a');
+    const st = this.state, s = m[sd], key = m.no + sd, R = this.realData();
+    const resolved = this.resolveSideReal(m, sd);
+    const opp = this.resolveSideReal(m, sd === 'a' ? 'b' : 'a');
+    const isReal = this.realSide(m, sd) != null;
+    const played = R.realWinners[m.no] != null;
     if (resolved && this.TEAMS[resolved]) {
-      const win = st.winners[m.no] === resolved;
-      const clickable = !!(resolved && opp);
+      const win = played ? (R.realWinners[m.no] === resolved) : (st.winners[m.no] === resolved);
+      const clickable = !played && !!(resolved && opp);
       let seed;
       if (s.k === 'w') seed = s.g + '1';
       else if (s.k === 'r') seed = s.g + '2';
       else if (s.k === 't') seed = this.TG[resolved] + '3';
       else seed = this.TG[resolved];
       return {
-        isTeam: true, flag: this.TEAMS[resolved][1], name: this.TEAMS[resolved][0], seed,
+        isTeam: true, flag: this.TEAMS[resolved][1], name: this.TEAMS[resolved][0], seed, real: isReal,
         seedBg: win ? '#0E8C4F' : '#ECE7D6', seedFg: win ? '#FFFFFF' : '#8B8770',
         bg: win ? '#E6F3E9' : 'transparent',
         cursor: clickable ? 'pointer' : 'default',
         mark: win ? 'Win ✓' : (clickable ? 'Tap' : ''), markFg: win ? '#0E8C4F' : '#857E68',
         onClick: clickable ? (() => this.setWinner(m.no, resolved)) : undefined,
-        canClear: s.k === 't',
-        onClear: s.k === 't' ? ((e) => { e.stopPropagation(); this.setThird(key, '', m.no); }) : undefined
+        canClear: s.k === 't' && !isReal,
+        onClear: (s.k === 't' && !isReal) ? ((e) => { e.stopPropagation(); this.setThird(key, '', m.no); }) : undefined
       };
     }
     if (s.k === 't') {
@@ -670,11 +827,19 @@ class App extends Component {
         odds = { loading: true };
       }
       const hasSquad = !!(this.SQ(t1) || this.SQ(t2));
+      const rr = this.matchResult(t1, t2);
+      let result = null;
+      if (rr) {
+        const winNm = rr.s1 === rr.s2 ? '' : (rr.s1 > rr.s2 ? this.TEAMS[t1][0] : this.TEAMS[t2][0]);
+        result = { s1: rr.s1, s2: rr.s2, fin: rr.fin, live: rr.live,
+          tag: rr.live ? '🔴 LIVE' : 'FT', tagBg: rr.live ? '#FBE9E7' : '#E6F3E9', tagFg: rr.live ? '#C8332B' : '#0E8C4F',
+          out: rr.s1 === rr.s2 ? 'Draw' : winNm + ' win', outFg: rr.s1 === rr.s2 ? '#8A6A0B' : '#0E8C4F' };
+      }
       day.matches.push({
         mno: no, t1: this.T(t1), t2: this.T(t2),
         ven: V[0], city: V[1],
-        bg: '#FFFFFF', bd: '#DCD6C2',
-        rail: railC, tags, odds, hasSquad
+        bg: result && result.fin ? '#FBFAF4' : '#FFFFFF', bd: '#DCD6C2',
+        rail: railC, tags, odds, hasSquad, result
       });
     });
     days.forEach(day => { day.count = day.matches.length; });
@@ -703,13 +868,32 @@ class App extends Component {
           onTap: () => this.tapTeam(g, t)
         };
       });
+      /* actual standings from live results */
+      const gt = this.groupTable(g);
+      const realRows = gt.rows.map((r, idx) => {
+        let bg = '#E2DECE', fg = '#8B8770';
+        if (gt.played) {
+          if (idx === 0) { bg = '#0E8C4F'; fg = '#FFFFFF'; }
+          else if (idx === 1) { bg = '#1D5FBF'; fg = '#FFFFFF'; }
+          else if (idx === 2) { bg = '#B8860B'; fg = '#FFFFFF'; }
+        }
+        return { pos: idx + 1, flag: this.TEAMS[r.code][1], name: this.TEAMS[r.code][0],
+          pl: r.pl, pts: r.pts, gd: (r.gd > 0 ? '+' : '') + r.gd, bg, fg };
+      });
+      let cmp = '';
+      if (gt.complete && arr.length >= 2) {
+        const realTop2 = gt.rows.slice(0, 2).map(r => r.code);
+        const hit = arr.slice(0, 2).filter(c => realTop2.includes(c)).length;
+        cmp = 'Top-2 hit ' + hit + '/2';
+      }
       return {
         g, teams,
         bd: complete ? '#BFD8C5' : '#DCD6C2',
         headBg: complete ? '#E6F3E9' : '#F7F4E9',
         status: complete ? 'Done ✓' : (arr.length ? arr.length + ' ranked' : 'Tap to rank'),
         statusFg: complete ? '#0E8C4F' : '#6F6856',
-        onReset: () => this.resetGroup(g)
+        onReset: () => this.resetGroup(g),
+        realRows, played: gt.played, realComplete: gt.complete, cmp
       };
     });
 
@@ -839,7 +1023,13 @@ ${vals.showSched && html`
           <div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">
             ${m.tags.map(tg => html`<span style=${`font-size:10.5px;font-weight:700;letter-spacing:.6px;padding:2.5px 8px;border-radius:5px;background:${tg.bg};color:${tg.fg}`}>${tg.t}</span>`)}
           </div>
-          ${m.odds && (m.odds.loading ? html`
+          ${m.result ? html`
+          <div style="margin-top:9px;padding-top:8px;border-top:1px dashed #E0DAC6;display:flex;align-items:center;gap:9px">
+            <span style=${`font-size:10px;font-weight:700;letter-spacing:.5px;padding:2.5px 7px;border-radius:5px;background:${m.result.tagBg};color:${m.result.tagFg}`}>${m.result.tag}</span>
+            <span style="font-family:'Anton',sans-serif;font-size:21px;letter-spacing:1.5px;color:#191D17">${m.result.s1} <span style="color:#C2B79A">–</span> ${m.result.s2}</span>
+            <span style="flex:1"></span>
+            <span style=${`font-size:11.5px;font-weight:700;color:${m.result.outFg}`}>${m.result.out}</span>
+          </div>` : (m.odds && (m.odds.loading ? html`
           <div style="margin-top:9px;padding-top:8px;border-top:1px dashed #E0DAC6">
             <div style="font-size:10.5px;color:#6F6856;margin-bottom:4px">Loading odds…</div>
             <div style="height:7px;border-radius:4px;background:#EAE5D5"></div>
@@ -856,7 +1046,7 @@ ${vals.showSched && html`
               <i style=${`width:${m.odds.q2}%;background:#C8332B`}></i>
             </div>
             <div style="font-size:10px;color:#6F6856;text-align:right;margin-top:3px">${m.odds.src}</div>
-          </div>`)}
+          </div>`))}
         </div>
       </div>`)}
   `)}
@@ -889,6 +1079,27 @@ ${vals.showGrp && html`
             <span style=${`flex:1;font-size:15px;font-weight:600;color:${t.fg}`}>${t.name}</span>
             <span style=${`font-size:11px;font-weight:600;color:${t.noteFg}`}>${t.note}</span>
           </button>`)}
+        ${gc.played ? html`
+        <div style="border-top:2px solid #EFEADB;padding:8px 12px 9px;background:#FBF9F1">
+          <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:5px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.5px;color:#6F6856">📊 Actual table</span>
+            <span style=${`font-size:10.5px;font-weight:700;color:${gc.realComplete ? '#0E8C4F' : '#8A6A0B'}`}>${gc.realComplete ? 'Final ✓' : 'In progress ' + gc.played + '/6'}</span>
+            <span style="flex:1"></span>
+            ${gc.cmp ? html`<span style="font-size:10.5px;font-weight:700;color:#1D5FBF">${gc.cmp}</span>` : ''}
+          </div>
+          <div style="display:flex;font-size:9.5px;color:#A8A189;font-weight:700;letter-spacing:.5px;padding:0 0 3px">
+            <span style="width:18px"></span><span style="flex:1"></span><span style="width:30px;text-align:center">P</span><span style="width:34px;text-align:right">GD</span><span style="width:26px;text-align:right">Pts</span>
+          </div>
+          ${gc.realRows.map(r => html`
+          <div style="display:flex;align-items:center;gap:7px;padding:2.5px 0;font-size:12.5px">
+            <span style=${`width:18px;height:18px;flex:none;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:${r.bg};color:${r.fg}`}>${r.pos}</span>
+            <span style="font-size:14px;flex:none">${r.flag}</span>
+            <span style="flex:1;font-weight:600;color:#191D17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</span>
+            <span style="width:30px;text-align:center;color:#8B8770;font-variant-numeric:tabular-nums">${r.pl}</span>
+            <span style="width:34px;text-align:right;color:#6F6856;font-variant-numeric:tabular-nums">${r.gd}</span>
+            <span style="width:26px;text-align:right;font-weight:700;color:#191D17;font-variant-numeric:tabular-nums">${r.pts}</span>
+          </div>`)}
+        </div>` : ''}
       </div>`)}
   </div>
 </section>`}
@@ -917,7 +1128,7 @@ ${vals.showKo && html`
             ${r.hl && html`<span style="flex:none;font-size:10px;font-weight:700;color:#7A5A00;background:#F4E3AC;padding:1.5px 6px;border-radius:4px">Your pick</span>`}
           </div>`)}
       </div>`}
-    <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:10px;line-height:1.55">The Round of 32 is <b style="color:#191D17">filled automatically</b> from your Group rankings; assign “best third” slots with the dropdowns. <b style="color:#191D17">Tap a team = advance, tap again to undo</b> — results carry to the next round. Swipe sideways for the full bracket.</div>
+    <div style="font-size:12.5px;color:#6B7263;background:#E9E4D2;border-radius:10px;padding:10px 13px;margin-bottom:10px;line-height:1.55">Teams from finished groups carry an <b style="color:#0E8C4F">actual</b> tag and are <b style="color:#191D17">slotted automatically</b> by real results (incl. best thirds). Unplayed ties show your prediction — <b style="color:#191D17">tap a team = predict advance, tap again to undo</b>. Played matches lock to the real winner. Swipe sideways for the full bracket.</div>
     <div style="font-size:12.5px;color:#1D4E8C;background:#E7EEF8;border:1px solid #C9D9EE;border-radius:10px;padding:10px 13px;margin-bottom:12px;line-height:1.55">🇺🇸 <b>USA route:</b> Group D 1st → Round of 32 <b>7/1 at Levi's</b> → R16 7/6 Seattle → QF 7/11 Kansas City → SF 7/15 Atlanta → Final 7/19 New York. Group D 2nd → 7/3 Dallas.</div>
     <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
       ${vals.koJump.map(j => html`
@@ -948,6 +1159,7 @@ ${vals.showKo && html`
                       <div onClick=${s.onClick} style=${`display:flex;align-items:center;gap:7px;padding:8px 10px;border-top:1px solid #EFEADB;cursor:${s.cursor};background:${s.bg};transition:background .15s`}>
                         <span style="font-size:16px">${s.flag}</span>
                         <span style="flex:1;font-size:14px;font-weight:600;color:#191D17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</span>
+                        ${s.real && html`<span style="font-size:9px;font-weight:700;letter-spacing:.5px;color:#0E8C4F;background:#E6F3E9;padding:1.5px 5px;border-radius:4px;flex:none">actual</span>`}
                         <span style=${`font-size:10px;font-weight:700;letter-spacing:.5px;color:${s.seedFg};background:${s.seedBg};padding:1.5px 6px;border-radius:4px`}>${s.seed}</span>
                         <span style=${`font-size:11px;font-weight:700;color:${s.markFg};flex:none`}>${s.mark}</span>
                         ${s.canClear && html`<span onClick=${s.onClear} style="font-size:11px;color:#6F6856;border:1px solid #DCD6C2;border-radius:5px;padding:1px 6px;cursor:pointer;flex:none">edit</span>`}
